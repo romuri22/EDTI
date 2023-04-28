@@ -9,8 +9,8 @@ class App(ctk.CTk):     # App class, main interface, calls other classes into 3 
 
         # App window configuration
         self.title("Engine Signal Simulation Interface")
-        self.geometry(f"{1100}x{580}")
-        #self.resizable(0.1,0.1)
+        self.geometry(f"{1300}x{580}")
+        self.resizable(0, 0)
         # App column weights
         self.columnconfigure((0), weight=1)
         self.columnconfigure((1, 2), weight=3)
@@ -75,8 +75,7 @@ class LogoFrame(ctk.CTkFrame):              # Logo frame class
         self.logo_label = ctk.CTkLabel(self.logo_frame, text="Generac Logo")
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
         # Codigo para poner el logo en version final
-        #self.logo_image = ctk.CTkImage(Image.open("/Users/rodrigomurillo/Documents/Python/EDTI/generac_logo.png"), size=(200, 50))
-        #self.logo_image.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        #self.logo_image = ctk.CTkImage(Image.open("/Users/rodrigomurillo/Documents/Python/EDTI/generac_logo_dark.png"), size=(200, 48))
         #self.logo_label = ctk.CTkLabel(self.logo_frame, image=self.logo_image, text="")
         #self.logo_label.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
 
@@ -92,7 +91,7 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         self.engine_selector_frame.rowconfigure((0, 2), weight=1)
 
         # Engine selector label
-        self.engine_selector_label = ctk.CTkLabel(self.engine_selector_frame, text="Engine Selector")
+        self.engine_selector_label = ctk.CTkLabel(self.engine_selector_frame, text="ENGINE SELECTOR")
         self.engine_selector_label.grid(column=0, row=0, padx=10, pady=5)
         # Engine range menu
         self.engine_range_menu = ctk.CTkOptionMenu(self.engine_selector_frame, values=["Engine Range", "MTU", "Perkins", "Scania"], command=self.select_engine_range)
@@ -155,7 +154,7 @@ class EngineImageAndInfo(ctk.CTkFrame):
         self.image_info_label.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
 
-class MainSignals(ctkA.CTkFrame):
+class MainSignals(ctk.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
 
@@ -163,19 +162,19 @@ class MainSignals(ctkA.CTkFrame):
         self.main_signals_frame = ctk.CTkFrame(master)
         self.main_signals_frame.grid(sticky="nsew", pady=(10, 0))
         self.main_signals_frame.grid_columnconfigure((2), weight=3)
-        self.main_signals_frame.grid_rowconfigure((1, 2, 3, 4), weight=1)
+        self.main_signals_frame.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
         
         # Main Signal label/ switch
         self.main_signals_label = ctk.CTkLabel(self.main_signals_frame, text="MAIN SIGNALS")
-        self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=5, pady=5, sticky="nsew")
+        self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=(10, 5), pady=5, sticky="nsew")
         self.engine_speed_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Speed")
-        self.engine_speed_switch.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.engine_speed_switch.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="w")
         self.oil_pressure_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Oil Pressure")
-        self.oil_pressure_switch.grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        self.oil_pressure_switch.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="w")
         self.coolant_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Coolant Temp")
-        self.coolant_temperature_switch.grid(row=3, column=0, padx=5, pady=5, sticky="w")
+        self.coolant_temperature_switch.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="w")
         self.engine_hours_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Hours")
-        self.engine_hours_switch.grid(row=4, column=0, padx=5, pady=5, sticky="w")
+        self.engine_hours_switch.grid(row=4, column=0, padx=(10, 5), pady=5, sticky="w")
 
         # Main signal initial number labels
         self.engine_speed_inicial = ctk.CTkLabel(self.main_signals_frame, text="0")
@@ -209,13 +208,13 @@ class MainSignals(ctkA.CTkFrame):
 
         # create main entries
         self.engine_speed_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="RPM", width=40)
-        self.engine_speed_entry.grid(row=1, column=4, padx=(0,5), pady=5)
+        self.engine_speed_entry.grid(row=1, column=4, padx=(0,10), pady=5)
         self.oil_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
-        self.oil_pressure_entry.grid(row=2, column=4, padx=(0,5), pady=5)
+        self.oil_pressure_entry.grid(row=2, column=4, padx=(0,10), pady=5)
         self.coolant_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
-        self.coolant_temperature_entry.grid(row=3, column=4, padx=(0,5), pady=5)
+        self.coolant_temperature_entry.grid(row=3, column=4, padx=(0,10), pady=5)
         self.engine_hours_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="hrs", width=40)
-        self.engine_hours_entry.grid(row=4, column=4, padx=(0,5), pady=5)
+        self.engine_hours_entry.grid(row=4, column=4, padx=(0,10), pady=5)
 
         # Main signal initial states
         self.engine_speed_switch.select()
@@ -246,9 +245,9 @@ class SecondarySignals(ctk.CTkFrame):
         self.main_signals_label = ctk.CTkLabel(self.main_signals_frame, text="SECONDARY SIGNALS")
         self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=5, pady=5, sticky="nsew")
         self.oil_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Oil Temperature")
-        self.oil_temperature_switch.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.oil_temperature_switch.grid(row=1, column=0, padx=5, pady=(10, 5), sticky="w")
         self.coolant_pressure_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Coolant Pressure")
-        self.coolant_pressure_switch.grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        self.coolant_pressure_switch.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="w")
 
         # Secondary signal initial number labels
         self.oil_temperature_inicial = ctk.CTkLabel(self.main_signals_frame, text="0")
@@ -270,9 +269,9 @@ class SecondarySignals(ctk.CTkFrame):
 
         # create secondary entries
         self.oil_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
-        self.oil_temperature_entry.grid(row=1, column=4, padx=(0,5), pady=5)
+        self.oil_temperature_entry.grid(row=1, column=4, padx=(0, 10), pady=5)
         self.coolant_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
-        self.coolant_pressure_entry.grid(row=2, column=4, padx=(0,5), pady=5)
+        self.coolant_pressure_entry.grid(row=2, column=4, padx=(0, 10), pady=5)
 
         # Secondary signal initial states
         self.oil_temperature_switch.select()
