@@ -125,16 +125,16 @@ class StartStop(ctk.CTkFrame):
         self.start_stop_frame.grid_columnconfigure(0, weight=1)
         self.start_stop_frame.grid_rowconfigure((0, 2), weight=1)
         # Start/stop label
-        self.start_stop_label = ctk.CTkLabel(self.start_stop_frame, text="Start/Stop Communication")
+        self.start_stop_label = ctk.CTkLabel(self.start_stop_frame, text="SEND CAN MESSAGE")
         self.start_stop_label.grid(column=0, row=0, padx=10, pady=5)
         # Start and stop buttons
-        self.start_button = ctk.CTkButton(self.start_stop_frame, text="Start", command=self.start_commnication)
+        self.start_button = ctk.CTkButton(self.start_stop_frame, text="SEND", command=self.start_commnication)
         self.start_button.grid(column=0, row=1, padx=10, pady=5)
-        self.stop_button = ctk.CTkButton(self.start_stop_frame, text="Stop", command=self.stop_commnication)
+        self.stop_button = ctk.CTkButton(self.start_stop_frame, text="STOP", command=self.stop_commnication)
         self.stop_button.grid(column=0, row=2, padx=10, pady=5)
 
     def start_commnication(self):
-        print("Communication started")
+        print("Communication Started")
 
     def stop_commnication(self):
         print("Communication Stopped")
@@ -155,7 +155,7 @@ class EngineImageAndInfo(ctk.CTkFrame):
         self.image_info_label.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
 
-class MainSignals(ctk.CTkFrame):
+class MainSignals(ctkA.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
 
