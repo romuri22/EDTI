@@ -1,9 +1,21 @@
 import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageTk
+import os
 
 
-class App(ctk.CTk):     # App class, main interface, calls other classes into 3 grids
+# Set interface appearance mode: "Dark", "Light"
+appearance_mode = "Dark"
+
+# Interface appearance configuration
+if appearance_mode == "Dark":
+    logo_file = os.path.abspath("generac_logo_dark.png")
+else:
+    logo_file = os.path.abspath("generac_logo_light.png")
+ctk.set_appearance_mode(appearance_mode)
+ctk.set_default_color_theme(os.path.abspath("generac_theme.json"))
+
+class App(ctk.CTk):     # App class, main interface, calls other frame classes into 3 grids
     def __init__(self):
         super().__init__()
 
@@ -71,13 +83,12 @@ class LogoFrame(ctk.CTkFrame):              # Logo frame class
         self.logo_frame.grid(sticky="nsew", pady=(0, 10))
         self.logo_frame.columnconfigure(0, weight=1)
         self.logo_frame.rowconfigure(0, weight=1)
-        # Label temporal, cambiar por codigo de abajo en version final
-        self.logo_label = ctk.CTkLabel(self.logo_frame, text="Generac Logo")
-        self.logo_label.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
-        # Codigo para poner el logo en version final
-        #self.logo_image = ctk.CTkImage(Image.open("/Users/rodrigomurillo/Documents/Python/EDTI/generac_logo_dark.png"), size=(200, 48))
-        #self.logo_label = ctk.CTkLabel(self.logo_frame, image=self.logo_image, text="")
-        #self.logo_label.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+        # Logo, comment first line for dark theme, second line for light theme
+        #self.logo_image = ctk.CTkImage(Image.open(os.path.abspath("generac_logo_light.png")), size=(200, 45))
+        self.logo_image = ctk.CTkImage(Image.open(logo_file), size=(200, 45))
+        self.logo_label = ctk.CTkLabel(self.logo_frame, image=self.logo_image, text="")
+        self.logo_label.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
 
 
 class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
