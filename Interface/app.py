@@ -22,7 +22,7 @@ class App(ctk.CTk):     # App class, main interface, calls other frame classes i
 
         # App window configuration
         self.title("Engine Signal Simulation Interface")
-        self.geometry(f"{1300}x{580}")
+        self.geometry(f"{1300}x{600}")
         self.resizable(0, 0)
         # App column weights
         self.columnconfigure((0), weight=1)
@@ -170,91 +170,120 @@ class MainSignals(ctk.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
 
-        self.engine_speed = 0
-
-        self.values = np.array([0, 2, 0, 0])
-        
+        """ self.main_values = np.array([0, 0, 0, 0]) """
 
         # Main signals frame configuration
         self.main_signals_frame = ctk.CTkFrame(master)
         self.main_signals_frame.grid(sticky="nsew", pady=(10, 0))
         self.main_signals_frame.grid_columnconfigure((2), weight=3)
         self.main_signals_frame.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
-        
-        # Main Signal label/ switch
+
+        # Main signals frame title label
         self.main_signals_label = ctk.CTkLabel(self.main_signals_frame, text="MAIN SIGNALS")
         self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=(10, 5), pady=5, sticky="nsew")
-        self.engine_speed_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Speed")
+        
+
+        # For loop
+        self.main_values = [ctk.DoubleVar() for _ in range(4)]
+
+        # Matrix used in setup with data for each main signal
+        self.main_signals_setup = [
+            {"text": "Engine Speed", "row": 1, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Oil Pressure", "row": 2, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Coolant Temp", "row": 3, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Engine Hours", "row": 4, "initial": 0, "final": 100, "steps": 100},
+        ]
+
+        # For loop to create switch, initial and final value labels, slider, and textbox for each signal
+        for signal_data in self.main_signals_setup:
+            # Signal switch with label
+            switch = ctk.CTkSwitch(master=self.main_signals_frame, text=signal_data["text"])
+            switch.grid(row=signal_data["row"], column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
+            setattr(self, f"{signal_data['text'].lower().replace(' ', '_')}_switch", switch)
+            # Initial value label
+            initial_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["initial"]))
+            initial_label.grid(row=signal_data["row"], column=1, padx=(5, 0), pady=5, sticky="nsew")
+            # Final value label
+            final_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["final"]))
+            final_label.grid(row=signal_data["row"], column=3, padx=(0, 5), pady=5, sticky="nsew")
+            # Signal slider
+            slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[signal_data["row"]-1], command=self.print_value)
+            slider.grid(row=signal_data["row"], column=2, padx=2, pady=5, sticky="ew")
+            # Signal textbox entry
+            entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_values[signal_data["row"]-1])
+            entry.grid(row=signal_data["row"], column=4, padx=(0,10), pady=5)
+            # Default values
+            switch.select()
+            slider.set(signal_data["initial"])
+
+        # Main Signal label/ switch
+        """ self.engine_speed_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Speed")
         self.engine_speed_switch.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="nsw")
         self.oil_pressure_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Oil Pressure")
         self.oil_pressure_switch.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="nsw")
         self.coolant_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Coolant Temp")
         self.coolant_temperature_switch.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="nsw")
         self.engine_hours_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Hours")
-        self.engine_hours_switch.grid(row=4, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
+        self.engine_hours_switch.grid(row=4, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw") """
 
         # Main signal initial number labels
-        self.engine_speed_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
+        """ self.engine_speed_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
         self.engine_speed_initial.grid(row=1, column=1, padx=(5, 0), pady=5, sticky="nsew")
         self.oil_pressure_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
         self.oil_pressure_initial.grid(row=2, column=1, padx=(5, 0), pady=5, sticky="nsew")
         self.coolant_temperature_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
         self.coolant_temperature_initial.grid(row=3, column=1, padx=(5, 0), pady=5, sticky="nsew")
         self.engine_hours_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.engine_hours_initial.grid(row=4, column=1, padx=(5, 0), pady=5, sticky="nsew")
+        self.engine_hours_initial.grid(row=4, column=1, padx=(5, 0), pady=5, sticky="nsew") """
 
         # Main signals sliders
-        self.engine_speed_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.engine_speed_slider.get(), 0))
+        """ self.engine_speed_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, variable=self.main_vars[0], command=self.print_value)
         self.engine_speed_slider.grid(row=1, column=2, padx=2, pady=5, sticky="ew")
-        self.oil_pressure_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.oil_pressure_slider.get(), 1))
+        self.oil_pressure_slider = ctk.CTkSlider(self.main_signals_frame, from_=5, to=400, number_of_steps=200, variable=self.main_vars[1], command=self.print_value)
         self.oil_pressure_slider.grid(row=2, column=2, padx=2, pady=5, sticky="ew")
-        self.coolant_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.coolant_temperature_slider.get(), 2))
+        self.coolant_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=300, number_of_steps=100, variable=self.main_vars[2], command=self.print_value)
         self.coolant_temperature_slider.grid(row=3, column=2, padx=2, pady=5, sticky="ew")
-        self.engine_hours_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.engine_hours_slider.get(), 3))
-        self.engine_hours_slider.grid(row=4, column=2, padx=2, pady=5, sticky="ew")
+        self.engine_hours_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=300, variable=self.main_vars[3], command=self.print_value)
+        self.engine_hours_slider.grid(row=4, column=2, padx=2, pady=5, sticky="ew") """
 
         # Main signal final number labels
-        self.engine_speed_final = ctk.CTkLabel(self.main_signals_frame, text="1000")
+        """ self.engine_speed_final = ctk.CTkLabel(self.main_signals_frame, text="1000")
         self.engine_speed_final.grid(row=1, column=3, padx=(0, 5), pady=5, sticky="nsew")
         self.oil_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="80")
         self.oil_pressure_final.grid(row=2, column=3, padx=(0, 5), pady=5, sticky="nsew")
         self.coolant_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="50")
         self.coolant_temperature_final.grid(row=3, column=3, padx=(0, 5), pady=5, sticky="nsew")
         self.engine_hours_final = ctk.CTkLabel(self.main_signals_frame, text="500")
-        self.engine_hours_final.grid(row=4, column=3, padx=(0, 5), pady=5, sticky="nsew")
+        self.engine_hours_final.grid(row=4, column=3, padx=(0, 5), pady=5, sticky="nsew") """
 
         # create main entries
-        self.engine_speed_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="RPM", width=40)
+        """ self.engine_speed_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[0])
         self.engine_speed_entry.grid(row=1, column=4, padx=(0,10), pady=5)
-        self.oil_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
+        self.oil_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[1])
         self.oil_pressure_entry.grid(row=2, column=4, padx=(0,10), pady=5)
-        self.coolant_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
+        self.coolant_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[2])
         self.coolant_temperature_entry.grid(row=3, column=4, padx=(0,10), pady=5)
-        self.engine_hours_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="hrs", width=40)
-        self.engine_hours_entry.grid(row=4, column=4, padx=(0,10), pady=5)
+        self.engine_hours_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[3])
+        self.engine_hours_entry.grid(row=4, column=4, padx=(0,10), pady=5) """
 
         # Main signal initial states
-        self.engine_speed_switch.select()
+        """ self.engine_speed_switch.select()
         self.oil_pressure_switch.select()
         self.coolant_temperature_switch.select()
-        self.engine_hours_switch.select()
-        self.engine_speed_slider.set(0)
+        self.engine_hours_switch.select() """
+        """ self.engine_speed_slider.set(0)
         self.oil_pressure_slider.set(0)
         self.coolant_temperature_slider.set(0)
-        self.engine_hours_slider.set(0)
+        self.engine_hours_slider.set(0) """
     
+    def print_value(self, value):
+        #self.main_vars[0].set(value)
+        val_list = []
+        for i in range(4):
+            val = self.main_values[i].get()
+            val_list.append(val)
+        print(val_list)
 
-        # Set slider values with textbox
-
-        # Set textbox values with slider
-
-
-    def slider_event(self, value, variable):
-        self.values[variable] = value
-        val = self.values[variable]
-        print(self.values)
-
-        pass
 
 
 class SecondarySignals(ctk.CTkFrame):
