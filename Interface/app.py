@@ -2,6 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
+import numpy as np
 
 
 # Set interface appearance mode: "Dark", "Light"
@@ -169,6 +170,11 @@ class MainSignals(ctk.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
 
+        self.engine_speed = 0
+
+        self.values = np.array([0, 2, 0, 0])
+        
+
         # Main signals frame configuration
         self.main_signals_frame = ctk.CTkFrame(master)
         self.main_signals_frame.grid(sticky="nsew", pady=(10, 0))
@@ -198,13 +204,13 @@ class MainSignals(ctk.CTkFrame):
         self.engine_hours_initial.grid(row=4, column=1, padx=(5, 0), pady=5, sticky="nsew")
 
         # Main signals sliders
-        self.engine_speed_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=1)
+        self.engine_speed_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.engine_speed_slider.get(), 0))
         self.engine_speed_slider.grid(row=1, column=2, padx=2, pady=5, sticky="ew")
-        self.oil_pressure_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=1)
+        self.oil_pressure_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.oil_pressure_slider.get(), 1))
         self.oil_pressure_slider.grid(row=2, column=2, padx=2, pady=5, sticky="ew")
-        self.coolant_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=1)
+        self.coolant_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.coolant_temperature_slider.get(), 2))
         self.coolant_temperature_slider.grid(row=3, column=2, padx=2, pady=5, sticky="ew")
-        self.engine_hours_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=1)
+        self.engine_hours_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event(self.engine_hours_slider.get(), 3))
         self.engine_hours_slider.grid(row=4, column=2, padx=2, pady=5, sticky="ew")
 
         # Main signal final number labels
@@ -236,10 +242,19 @@ class MainSignals(ctk.CTkFrame):
         self.oil_pressure_slider.set(0)
         self.coolant_temperature_slider.set(0)
         self.engine_hours_slider.set(0)
+    
 
         # Set slider values with textbox
 
         # Set textbox values with slider
+
+
+    def slider_event(self, value, variable):
+        self.values[variable] = value
+        val = self.values[variable]
+        print(self.values)
+
+        pass
 
 
 class SecondarySignals(ctk.CTkFrame):
