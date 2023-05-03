@@ -6,7 +6,7 @@ import numpy as np
 
 
 # Set interface appearance mode: "Dark", "Light"
-appearance_mode = "Light"
+appearance_mode = "Dark"
 
 # Interface appearance configuration
 if appearance_mode == "Dark":
@@ -106,22 +106,24 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         self.engine_selector_label = ctk.CTkLabel(self.engine_selector_frame, text="ENGINE SELECTOR")
         self.engine_selector_label.grid(column=0, row=0, padx=10, pady=5)
         # Engine range menu
-        self.engine_range_menu = ctk.CTkOptionMenu(self.engine_selector_frame, values=["Engine Range", "MTU", "Perkins", "Scania"], command=self.select_engine_range)
+        self.engine_range_menu = ctk.CTkOptionMenu(self.engine_selector_frame, values=["MTU", "Perkins", "Scania"], command=self.select_engine_range)
         self.engine_range_menu.grid(column=0, row=1, padx=10, pady=5)
+        self.engine_range_menu.set("Engine Range")
         # Engine model menu
         self.engine_model_menu = ctk.CTkOptionMenu(self.engine_selector_frame, values=["Engine Model", "1", "2", "3"])
         self.engine_model_menu.grid(column=0, row=2, padx=10, pady=5)
 
         # Set default values
         self.engine_model_menu.configure(state="disabled")
+        self.engine_model_menu.set("Engine Model")
 
     def select_engine_range(self, value):   # Function called by engine_range_menu with an engine range
         if value == "MTU":
-            self.engine_model_menu.configure(state="enabled", values=["Engine Model", "ADEC", "MDEC", "ECU8"])
+            self.engine_model_menu.configure(state="enabled", values=["ADEC", "MDEC", "ECU8"])
         elif value == "Perkins":
-            self.engine_model_menu.configure(state="enabled", values=["Engine Model", "1300", "ADEM3", "ADEM4"])
+            self.engine_model_menu.configure(state="enabled", values=["1300", "ADEM3", "ADEM4"])
         elif value == "Scania":
-            self.engine_model_menu.configure(state="enabled", values=["Engine Model", "S6"])
+            self.engine_model_menu.configure(state="enabled", values=["S6"])
         else:
             self.engine_model_menu.configure(state="disabled", values=["Engine Model"])
 
@@ -214,13 +216,13 @@ class MainSignals(ctk.CTkFrame):
         self.engine_hours_slider.grid(row=4, column=2, padx=2, pady=5, sticky="ew")
 
         # Main signal final number labels
-        self.engine_speed_final = ctk.CTkLabel(self.main_signals_frame, text="1000")
+        self.engine_speed_final = ctk.CTkLabel(self.main_signals_frame, text="100")
         self.engine_speed_final.grid(row=1, column=3, padx=(0, 5), pady=5, sticky="nsew")
-        self.oil_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="80")
+        self.oil_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="100")
         self.oil_pressure_final.grid(row=2, column=3, padx=(0, 5), pady=5, sticky="nsew")
-        self.coolant_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="50")
+        self.coolant_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
         self.coolant_temperature_final.grid(row=3, column=3, padx=(0, 5), pady=5, sticky="nsew")
-        self.engine_hours_final = ctk.CTkLabel(self.main_signals_frame, text="500")
+        self.engine_hours_final = ctk.CTkLabel(self.main_signals_frame, text="100")
         self.engine_hours_final.grid(row=4, column=3, padx=(0, 5), pady=5, sticky="nsew")
 
         # create main entries
@@ -331,18 +333,45 @@ class SecondarySignals(ctk.CTkFrame):
         self.dm1_red_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=1)
         self.dm1_red_slider.grid(row=9, column=2, padx=2, pady=5, sticky="ew")
 
-
         # Secondary signal final number labels
-        self.oil_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="80")
+        self.oil_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
         self.oil_temperature_final.grid(row=1, column=3, padx=(0, 5), pady=5)
-        self.coolant_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="50")
-        self.coolant_pressure_final.grid(row=2, column=3, padx=(0, 5), pady=5)
+        self.inlet_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.inlet_temperature_final.grid(row=2, column=3, padx=(0, 5), pady=5)
+        self.fuel_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.fuel_temperature_final.grid(row=3, column=3, padx=(0, 5), pady=5)
+        self.turbo_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.turbo_pressure_final.grid(row=4, column=3, padx=(0, 5), pady=5)
+        self.fuel_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.fuel_pressure_final.grid(row=5, column=3, padx=(0, 5), pady=5)
+        self.fuel_consumption_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.fuel_consumption_final.grid(row=6, column=3, padx=(0, 5), pady=5)
+        self.fuel_used_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.fuel_used_final.grid(row=7, column=3, padx=(0, 5), pady=5)
+        self.dm1_amber_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.dm1_amber_final.grid(row=8, column=3, padx=(0, 5), pady=5)
+        self.dm1_red_final = ctk.CTkLabel(self.main_signals_frame, text="100")
+        self.dm1_red_final.grid(row=9, column=3, padx=(0, 5), pady=5)
 
         # create secondary entries
-        self.oil_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
+        self.oil_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
         self.oil_temperature_entry.grid(row=1, column=4, padx=(0, 10), pady=5)
-        self.coolant_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
-        self.coolant_pressure_entry.grid(row=2, column=4, padx=(0, 10), pady=5)
+        self.inlet_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
+        self.inlet_temperature_entry.grid(row=2, column=4, padx=(0, 10), pady=5)
+        self.fuel_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
+        self.fuel_temperature_entry.grid(row=3, column=4, padx=(0, 10), pady=5)
+        self.turbo_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
+        self.turbo_pressure_entry.grid(row=4, column=4, padx=(0, 10), pady=5)
+        self.fuel_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
+        self.fuel_pressure_entry.grid(row=5, column=4, padx=(0, 10), pady=5)
+        self.fuel_consumption_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="lts", width=40)
+        self.fuel_consumption_entry.grid(row=6, column=4, padx=(0, 10), pady=5)
+        self.fuel_used_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="lts", width=40)
+        self.fuel_used_entry.grid(row=7, column=4, padx=(0, 10), pady=5)
+        self.dm1_amber_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="Y", width=40)
+        self.dm1_amber_entry.grid(row=8, column=4, padx=(0, 10), pady=5)
+        self.dm1_red_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="N", width=40)
+        self.dm1_red_entry.grid(row=9, column=4, padx=(0, 10), pady=5)
 
         # Secondary signal initial states
         self.oil_temperature_switch.select()
