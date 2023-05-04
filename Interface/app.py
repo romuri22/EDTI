@@ -173,7 +173,6 @@ class MainSignals(ctk.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
 
-
         # Main signals frame configuration
         self.main_signals_frame = ctk.CTkFrame(master)
         self.main_signals_frame.grid(sticky="nsew", pady=(10, 0))
@@ -184,10 +183,9 @@ class MainSignals(ctk.CTkFrame):
         self.main_signals_label = ctk.CTkLabel(self.main_signals_frame, text="MAIN SIGNALS")
         self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=(10, 5), pady=5, sticky="nsew")
         
-
         # List that stores main signal values
         self.main_values = [ctk.DoubleVar() for _ in range(4)]
-        # List with main switches, sliders and entries
+        # Lists with main switches, sliders and entries
         self.main_switches = []
         self.main_sliders = []
         self.main_entries = []
@@ -215,7 +213,7 @@ class MainSignals(ctk.CTkFrame):
             self.final_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["final"]))
             self.final_label.grid(row=signal_row, column=3, padx=(0, 5), pady=5, sticky="nsew")
             # Signal slider
-            self.slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[i], command=self.print_value)
+            self.slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[i], command=self.print_values)
             self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
             self.main_sliders.append(self.slider)
             # Signal textbox entry
@@ -225,39 +223,8 @@ class MainSignals(ctk.CTkFrame):
             # Default values
             self.switch.select()
             self.slider.set(signal_data["initial"])
-
-        # Main Signal label/ switch
-        """ self.engine_speed_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Speed")
-        self.engine_speed_switch.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.oil_pressure_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Oil Pressure")
-        self.oil_pressure_switch.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.coolant_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Coolant Temp")
-        self.coolant_temperature_switch.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.engine_hours_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Hours")
-        self.engine_hours_switch.grid(row=4, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw") """
-
-        # Main signals sliders
-        """ self.engine_speed_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, variable=self.main_vars[0], command=self.print_value)
-        self.engine_speed_slider.grid(row=1, column=2, padx=2, pady=5, sticky="ew")
-        self.oil_pressure_slider = ctk.CTkSlider(self.main_signals_frame, from_=5, to=400, number_of_steps=200, variable=self.main_vars[1], command=self.print_value)
-        self.oil_pressure_slider.grid(row=2, column=2, padx=2, pady=5, sticky="ew")
-        self.coolant_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=300, number_of_steps=100, variable=self.main_vars[2], command=self.print_value)
-        self.coolant_temperature_slider.grid(row=3, column=2, padx=2, pady=5, sticky="ew")
-        self.engine_hours_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=300, variable=self.main_vars[3], command=self.print_value)
-        self.engine_hours_slider.grid(row=4, column=2, padx=2, pady=5, sticky="ew") """
-
-        # Create main entries
-        """ self.engine_speed_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text= "RPM", width=40)
-        self.engine_speed_entry.grid(row=1, column=4, padx=(0,10), pady=5)
-        self.oil_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[1])
-        self.oil_pressure_entry.grid(row=2, column=4, padx=(0,10), pady=5)
-        self.coolant_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[2])
-        self.coolant_temperature_entry.grid(row=3, column=4, padx=(0,10), pady=5)
-        self.engine_hours_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[3])
-        self.engine_hours_entry.grid(row=4, column=4, padx=(0,10), pady=5) """
-
     
-    def print_value(self, value):
+    def print_values(self, value):
         val_list = []
         for i in range(4):
             val = self.main_values[i].get()
@@ -266,7 +233,6 @@ class MainSignals(ctk.CTkFrame):
 
     def switch_command(self, signal):
         print("Switch")
-        
         if self.main_switches[signal].get() == 0:
             self.main_sliders[signal].configure(state="disabled")
             self.main_sliders[signal].set(0)
@@ -274,17 +240,15 @@ class MainSignals(ctk.CTkFrame):
         else:
             self.main_sliders[signal].configure(state="normal")
             self.main_entries[signal].configure(state="normal")
-
+        self.print_values(0)
 
     def create_switch_command(self, i):
         return lambda: self.switch_command(i)
 
+
 class SecondarySignals(ctk.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
-
-
-        self.values2 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0])
 
         # Secondary signals frame configuration
         self.secondary_signals_frame = ctk.CTkFrame(master)
@@ -296,9 +260,9 @@ class SecondarySignals(ctk.CTkFrame):
         self.secondary_signals_label = ctk.CTkLabel(self.secondary_signals_frame, text="SECONDARY SIGNALS")
         self.secondary_signals_label.grid(row=0, column=0, columnspan=5, padx=5, pady=5, sticky="nsew")
 
-        # List that stores main signal values
+        # List that stores secondary signal values
         self.secondary_values = [ctk.DoubleVar() for _ in range(9)]
-        # List with main switches, sliders and entries
+        # Lists with secondary switches, sliders and entries
         self.secondary_switches = []
         self.secondary_sliders = []
         self.secondary_entries = []
@@ -331,7 +295,7 @@ class SecondarySignals(ctk.CTkFrame):
             self.final_label = ctk.CTkLabel(self.secondary_signals_frame, text=str(signal_data["final"]))
             self.final_label.grid(row=signal_row, column=3, padx=(0, 5), pady=5, sticky="nsew")
             # Signal slider
-            self.slider = ctk.CTkSlider(self.secondary_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.secondary_values[i], command=self.print_value)
+            self.slider = ctk.CTkSlider(self.secondary_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.secondary_values[i], command=self.print_values)
             self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
             self.secondary_sliders.append(self.slider)
             # Signal textbox entry
@@ -342,130 +306,7 @@ class SecondarySignals(ctk.CTkFrame):
             self.switch.select()
             self.slider.set(signal_data["initial"])
 
-        # Secondary signals switches
-        """ self.oil_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Oil Temperature")
-        self.oil_temperature_switch.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.inlet_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Inlet Temperature")
-        self.inlet_temperature_switch.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.fuel_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Fuel Temperature")
-        self.fuel_temperature_switch.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.turbo_pressure_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Turbo Pressure")
-        self.turbo_pressure_switch.grid(row=4, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.fuel_pressure_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Fuel Pressure")
-        self.fuel_pressure_switch.grid(row=5, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.fuel_consumption_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Fuel Consumption")
-        self.fuel_consumption_switch.grid(row=6, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.fuel_used_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Fuel Used")
-        self.fuel_used_switch.grid(row=7, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.dm1_amber_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="DM1 Amber")
-        self.dm1_amber_switch.grid(row=8, column=0, padx=(10, 5), pady=5, sticky="nsw")
-        self.dm1_red_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="DM1 Red")
-        self.dm1_red_switch.grid(row=9, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
-
-        # Secondary signal initial number labels
-        self.oil_temperature_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.oil_temperature_initial.grid(row=1, column=1, padx=(5, 0), pady=5)
-        self.inlet_temperature_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.inlet_temperature_initial.grid(row=2, column=1, padx=(5, 0), pady=5)
-        self.fuel_temperature_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.fuel_temperature_initial.grid(row=3, column=1, padx=(5, 0), pady=5)
-        self.turbo_pressure_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.turbo_pressure_initial.grid(row=4, column=1, padx=(5, 0), pady=5)
-        self.fuel_pressure_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.fuel_pressure_initial.grid(row=5, column=1, padx=(5, 0), pady=5)
-        self.fuel_consumption_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.fuel_consumption_initial.grid(row=6, column=1, padx=(5, 0), pady=5)
-        self.fuel_used_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.fuel_used_initial.grid(row=7, column=1, padx=(5, 0), pady=5)
-        self.dm1_amber_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.dm1_amber_initial.grid(row=8, column=1, padx=(5, 0), pady=5)
-        self.dm1_red_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.dm1_red_initial.grid(row=9, column=1, padx=(5, 0), pady=5)
-
-        # Secondary signals sliders
-        self.oil_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.oil_temperature_slider.get(), 0))
-        self.oil_temperature_slider.grid(row=1, column=2, padx=2, pady=5, sticky="ew")
-        self.inlet_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.inlet_temperature_slider.get(), 1))
-        self.inlet_temperature_slider.grid(row=2, column=2, padx=2, pady=5, sticky="ew")
-        self.fuel_temperature_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.fuel_temperature_slider.get(), 2))
-        self.fuel_temperature_slider.grid(row=3, column=2, padx=2, pady=5, sticky="ew")
-        self.turbo_pressure_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.turbo_pressure_slider.get(), 3))
-        self.turbo_pressure_slider.grid(row=4, column=2, padx=2, pady=5, sticky="ew")
-        self.fuel_pressure_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.fuel_pressure_slider.get(), 4))
-        self.fuel_pressure_slider.grid(row=5, column=2, padx=2, pady=5, sticky="ew")
-        self.fuel_consumption_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.fuel_consumption_slider.get(), 5))
-        self.fuel_consumption_slider.grid(row=6, column=2, padx=2, pady=5, sticky="ew")
-        self.fuel_used_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.fuel_used_slider.get(), 6))
-        self.fuel_used_slider.grid(row=7, column=2, padx=2, pady=5, sticky="ew")
-        self.dm1_amber_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.dm1_amber_slider.get(), 7))
-        self.dm1_amber_slider.grid(row=8, column=2, padx=2, pady=5, sticky="ew")
-        self.dm1_red_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, command=lambda x: self.slider_event2(self.dm1_red_slider.get(), 8))
-        self.dm1_red_slider.grid(row=9, column=2, padx=2, pady=5, sticky="ew")
-
-        # Secondary signal final number labels
-        self.oil_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.oil_temperature_final.grid(row=1, column=3, padx=(0, 5), pady=5)
-        self.inlet_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.inlet_temperature_final.grid(row=2, column=3, padx=(0, 5), pady=5)
-        self.fuel_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.fuel_temperature_final.grid(row=3, column=3, padx=(0, 5), pady=5)
-        self.turbo_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.turbo_pressure_final.grid(row=4, column=3, padx=(0, 5), pady=5)
-        self.fuel_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.fuel_pressure_final.grid(row=5, column=3, padx=(0, 5), pady=5)
-        self.fuel_consumption_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.fuel_consumption_final.grid(row=6, column=3, padx=(0, 5), pady=5)
-        self.fuel_used_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.fuel_used_final.grid(row=7, column=3, padx=(0, 5), pady=5)
-        self.dm1_amber_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.dm1_amber_final.grid(row=8, column=3, padx=(0, 5), pady=5)
-        self.dm1_red_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.dm1_red_final.grid(row=9, column=3, padx=(0, 5), pady=5)
-
-        # create secondary entries
-        self.oil_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
-        self.oil_temperature_entry.grid(row=1, column=4, padx=(0, 10), pady=5)
-        self.inlet_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
-        self.inlet_temperature_entry.grid(row=2, column=4, padx=(0, 10), pady=5)
-        self.fuel_temperature_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="°C", width=40)
-        self.fuel_temperature_entry.grid(row=3, column=4, padx=(0, 10), pady=5)
-        self.turbo_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
-        self.turbo_pressure_entry.grid(row=4, column=4, padx=(0, 10), pady=5)
-        self.fuel_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="kPa", width=40)
-        self.fuel_pressure_entry.grid(row=5, column=4, padx=(0, 10), pady=5)
-        self.fuel_consumption_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="lts", width=40)
-        self.fuel_consumption_entry.grid(row=6, column=4, padx=(0, 10), pady=5)
-        self.fuel_used_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="lts", width=40)
-        self.fuel_used_entry.grid(row=7, column=4, padx=(0, 10), pady=5)
-        self.dm1_amber_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="Y", width=40)
-        self.dm1_amber_entry.grid(row=8, column=4, padx=(0, 10), pady=5)
-        self.dm1_red_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="N", width=40)
-        self.dm1_red_entry.grid(row=9, column=4, padx=(0, 10), pady=5) 
-        
-        # Secondary signal initial states
-        self.oil_temperature_switch.select()
-        self.inlet_temperature_switch.select()
-        self.fuel_temperature_switch.select()
-        self.turbo_pressure_switch.select()
-        self.fuel_pressure_switch.select()
-        self.fuel_consumption_switch.select()
-        self.fuel_used_switch.select()
-        self.dm1_amber_switch.select()
-        self.dm1_red_switch.select()
-        
-        #self.coolant_pressure_switch.select()
-        self.oil_temperature_slider.set(0)
-        self.inlet_temperature_slider.set(0)
-        self.fuel_temperature_slider.set(0)
-        self.turbo_pressure_slider.set(0)
-        self.fuel_pressure_slider.set(0)
-        self.fuel_consumption_slider.set(0)
-        self.fuel_used_slider.set(0)
-        self.dm1_amber_slider.set(0)
-        self.dm1_red_slider.set(0)
-        """
-
-    def print_value(self, value):
+    def print_values(self, value):
         val_list = []
         for i in range(9):
             val = self.secondary_values[i].get()
@@ -474,7 +315,6 @@ class SecondarySignals(ctk.CTkFrame):
 
     def switch_command(self, signal):
         print("Switch")
-        
         if self.secondary_switches[signal].get() == 0:
             self.secondary_sliders[signal].configure(state="disabled")
             self.secondary_sliders[signal].set(0)
@@ -482,7 +322,7 @@ class SecondarySignals(ctk.CTkFrame):
         else:
             self.secondary_sliders[signal].configure(state="normal")
             self.secondary_entries[signal].configure(state="normal")
-
+        self.print_values(0)
 
     def create_switch_command(self, i):
         return lambda: self.switch_command(i)
