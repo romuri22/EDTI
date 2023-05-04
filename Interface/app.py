@@ -75,7 +75,6 @@ class App(ctk.CTk):                         # App class, main interface, calls o
         self.secondary_signals_frame.grid(column=0, row=0, sticky="nsew", pady=(0))    
 
     def set_signal_switches(self, main_switch_states, switch_states):
-        print("Hello from App!")
         self.main_signals_frame.set_switches(main_switch_states)
         self.secondary_signals_frame.set_switches(switch_states)
 
@@ -154,7 +153,7 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
             self.main_switch_states = [0, 0, 0, 0]
             
         self.app.set_signal_switches(self.main_switch_states, self.switch_states)
-    
+
 
 class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
     def __init__(self,master):
