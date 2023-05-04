@@ -6,7 +6,7 @@ import numpy as np
 
 
 # Set interface appearance mode: "Dark", "Light"
-appearance_mode = "Dark"
+appearance_mode = "Light"
 
 # Interface appearance configuration
 if appearance_mode == "Dark":
@@ -15,6 +15,7 @@ else:
     logo_file = os.path.abspath("generac_logo_light.png")
 ctk.set_appearance_mode(appearance_mode)
 ctk.set_default_color_theme(os.path.abspath("generac_theme.json"))
+
 
 class App(ctk.CTk):     # App class, main interface, calls other frame classes into 3 grids
     def __init__(self):
@@ -172,7 +173,6 @@ class MainSignals(ctk.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
 
-        """ self.main_values = np.array([0, 0, 0, 0]) """
 
         # Main signals frame configuration
         self.main_signals_frame = ctk.CTkFrame(master)
@@ -185,7 +185,7 @@ class MainSignals(ctk.CTkFrame):
         self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=(10, 5), pady=5, sticky="nsew")
         
 
-        # For loop
+        # Matrix that stores main signal values
         self.main_values = [ctk.DoubleVar() for _ in range(4)]
 
         # Matrix used in setup with data for each main signal
@@ -199,24 +199,24 @@ class MainSignals(ctk.CTkFrame):
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
         for signal_data in self.main_signals_setup:
             # Signal switch with label
-            switch = ctk.CTkSwitch(master=self.main_signals_frame, text=signal_data["text"])
-            switch.grid(row=signal_data["row"], column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
-            setattr(self, f"{signal_data['text'].lower().replace(' ', '_')}_switch", switch)
+            self.switch = ctk.CTkSwitch(master=self.main_signals_frame, text=signal_data["text"], command=self.switch_command)
+            self.switch.grid(row=signal_data["row"], column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
+            setattr(self, f"{signal_data['text'].lower().replace(' ', '_')}_switch", self.switch)
             # Initial value label
-            initial_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["initial"]))
-            initial_label.grid(row=signal_data["row"], column=1, padx=(5, 0), pady=5, sticky="nsew")
+            self.initial_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["initial"]))
+            self.initial_label.grid(row=signal_data["row"], column=1, padx=(5, 0), pady=5, sticky="nsew")
             # Final value label
-            final_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["final"]))
-            final_label.grid(row=signal_data["row"], column=3, padx=(0, 5), pady=5, sticky="nsew")
+            self.final_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["final"]))
+            self.final_label.grid(row=signal_data["row"], column=3, padx=(0, 5), pady=5, sticky="nsew")
             # Signal slider
-            slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[signal_data["row"]-1], command=self.print_value)
-            slider.grid(row=signal_data["row"], column=2, padx=2, pady=5, sticky="ew")
+            self.slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[signal_data["row"]-1], command=self.print_value)
+            self.slider.grid(row=signal_data["row"], column=2, padx=2, pady=5, sticky="ew")
             # Signal textbox entry
-            entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_values[signal_data["row"]-1])
-            entry.grid(row=signal_data["row"], column=4, padx=(0,10), pady=5)
+            self.entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_values[signal_data["row"]-1])
+            self.entry.grid(row=signal_data["row"], column=4, padx=(0,10), pady=5)
             # Default values
-            switch.select()
-            slider.set(signal_data["initial"])
+            self.switch.select()
+            self.slider.set(signal_data["initial"])
 
         # Main Signal label/ switch
         """ self.engine_speed_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Speed")
@@ -228,16 +228,6 @@ class MainSignals(ctk.CTkFrame):
         self.engine_hours_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Engine Hours")
         self.engine_hours_switch.grid(row=4, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw") """
 
-        # Main signal initial number labels
-        """ self.engine_speed_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.engine_speed_initial.grid(row=1, column=1, padx=(5, 0), pady=5, sticky="nsew")
-        self.oil_pressure_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.oil_pressure_initial.grid(row=2, column=1, padx=(5, 0), pady=5, sticky="nsew")
-        self.coolant_temperature_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.coolant_temperature_initial.grid(row=3, column=1, padx=(5, 0), pady=5, sticky="nsew")
-        self.engine_hours_initial = ctk.CTkLabel(self.main_signals_frame, text="0")
-        self.engine_hours_initial.grid(row=4, column=1, padx=(5, 0), pady=5, sticky="nsew") """
-
         # Main signals sliders
         """ self.engine_speed_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=100, variable=self.main_vars[0], command=self.print_value)
         self.engine_speed_slider.grid(row=1, column=2, padx=2, pady=5, sticky="ew")
@@ -248,19 +238,8 @@ class MainSignals(ctk.CTkFrame):
         self.engine_hours_slider = ctk.CTkSlider(self.main_signals_frame, from_=0, to=100, number_of_steps=300, variable=self.main_vars[3], command=self.print_value)
         self.engine_hours_slider.grid(row=4, column=2, padx=2, pady=5, sticky="ew") """
 
-        # Main signal final number labels
-        """ self.engine_speed_final = ctk.CTkLabel(self.main_signals_frame, text="1000")
-        self.engine_speed_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.engine_speed_final.grid(row=1, column=3, padx=(0, 5), pady=5, sticky="nsew")
-        self.oil_pressure_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.oil_pressure_final.grid(row=2, column=3, padx=(0, 5), pady=5, sticky="nsew")
-        self.coolant_temperature_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.coolant_temperature_final.grid(row=3, column=3, padx=(0, 5), pady=5, sticky="nsew")
-        self.engine_hours_final = ctk.CTkLabel(self.main_signals_frame, text="100")
-        self.engine_hours_final.grid(row=4, column=3, padx=(0, 5), pady=5, sticky="nsew")
-
-        # create main entries
-        self.engine_speed_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text= "RPM", width=40)
+        # Create main entries
+        """ self.engine_speed_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text= "RPM", width=40)
         self.engine_speed_entry.grid(row=1, column=4, padx=(0,10), pady=5)
         self.oil_pressure_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[1])
         self.oil_pressure_entry.grid(row=2, column=4, padx=(0,10), pady=5)
@@ -269,31 +248,23 @@ class MainSignals(ctk.CTkFrame):
         self.engine_hours_entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_vars[3])
         self.engine_hours_entry.grid(row=4, column=4, padx=(0,10), pady=5) """
 
-        # Main signal initial states
-        """ self.engine_speed_switch.select()
-        self.oil_pressure_switch.select()
-        self.coolant_temperature_switch.select()
-        self.engine_hours_switch.select() """
-        """ self.engine_speed_slider.set(0)
-        self.oil_pressure_slider.set(0)
-        self.coolant_temperature_slider.set(0)
-        self.engine_hours_slider.set(0) """
     
     def print_value(self, value):
-        #self.main_vars[0].set(value)
         val_list = []
         for i in range(4):
             val = self.main_values[i].get()
             val_list.append(val)
         print(val_list)
 
+    def switch_command(self):
+        
+        pass
 
 
 class SecondarySignals(ctk.CTkFrame):
     def __init__(self,master):
         super().__init__(master)
 
-        self.engine_speed2 = 0
 
         self.values2 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0])
 
@@ -434,4 +405,4 @@ class SecondarySignals(ctk.CTkFrame):
         val2 = self.values2[variable]
         print(self.values2)
 
-        pass
+
