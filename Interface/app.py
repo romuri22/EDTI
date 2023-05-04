@@ -269,11 +269,11 @@ class MainSignals(ctk.CTkFrame):
         
         if self.main_switches[signal].get() == 0:
             self.main_sliders[signal].configure(state="disabled")
+            self.main_sliders[signal].set(0)
             self.main_entries[signal].configure(state="disabled")
         else:
             self.main_sliders[signal].configure(state="normal")
             self.main_entries[signal].configure(state="normal")
-
 
 
     def create_switch_command(self, i):
@@ -287,17 +287,63 @@ class SecondarySignals(ctk.CTkFrame):
         self.values2 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0])
 
         # Secondary signals frame configuration
-        self.main_signals_frame = ctk.CTkFrame(master)
-        self.main_signals_frame.grid(sticky="nsew")
-        self.main_signals_frame.grid_columnconfigure((2), weight=3)
-        self.main_signals_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9), weight=1)
+        self.secondary_signals_frame = ctk.CTkFrame(master)
+        self.secondary_signals_frame.grid(sticky="nsew")
+        self.secondary_signals_frame.grid_columnconfigure((2), weight=3)
+        self.secondary_signals_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9), weight=1)
 
         # Secondary signals label
-        self.main_signals_label = ctk.CTkLabel(self.main_signals_frame, text="SECONDARY SIGNALS")
-        self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=5, pady=5, sticky="nsew")
+        self.secondary_signals_label = ctk.CTkLabel(self.secondary_signals_frame, text="SECONDARY SIGNALS")
+        self.secondary_signals_label.grid(row=0, column=0, columnspan=5, padx=5, pady=5, sticky="nsew")
+
+        # List that stores main signal values
+        self.secondary_values = [ctk.DoubleVar() for _ in range(9)]
+        # List with main switches, sliders and entries
+        self.secondary_switches = []
+        self.secondary_sliders = []
+        self.secondary_entries = []
+
+        # Matrix used in setup with data for each main signal
+        self.secondary_signals_setup = [
+            {"text": "Oil Temp", "row": 1, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Inlet Temp", "row": 2, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Fuel Temp", "row": 3, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Turbo Pressure", "row": 4, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Fuel Pressure", "row": 5, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Fuel Consumption", "row": 6, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Fuel Used", "row": 7, "initial": 0, "final": 100, "steps": 100},
+            {"text": "DM1 Amber", "row": 8, "initial": 0, "final": 100, "steps": 100},
+            {"text": "DM1 Red", "row": 9, "initial": 0, "final": 100, "steps": 100},
+        ]
+
+        # For loop to create switch, initial and final value labels, slider, and textbox for each signal
+        for signal_data in self.secondary_signals_setup:
+            signal_row = signal_data["row"]
+            i = signal_row - 1
+            # Signal switch with label
+            self.switch = ctk.CTkSwitch(master=self.secondary_signals_frame, text=signal_data["text"], command=self.create_switch_command(i))
+            self.switch.grid(row=signal_row, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
+            self.secondary_switches.append(self.switch)
+            # Initial value label
+            self.initial_label = ctk.CTkLabel(self.secondary_signals_frame, text=str(signal_data["initial"]))
+            self.initial_label.grid(row=signal_row, column=1, padx=(5, 0), pady=5, sticky="nsew")
+            # Final value label
+            self.final_label = ctk.CTkLabel(self.secondary_signals_frame, text=str(signal_data["final"]))
+            self.final_label.grid(row=signal_row, column=3, padx=(0, 5), pady=5, sticky="nsew")
+            # Signal slider
+            self.slider = ctk.CTkSlider(self.secondary_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.secondary_values[i], command=self.print_value)
+            self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
+            self.secondary_sliders.append(self.slider)
+            # Signal textbox entry
+            self.entry = ctk.CTkEntry(master=self.secondary_signals_frame, width=50, textvariable=self.secondary_values[i])
+            self.entry.grid(row=signal_row, column=4, padx=(0,10), pady=5)
+            self.secondary_entries.append(self.entry)
+            # Default values
+            self.switch.select()
+            self.slider.set(signal_data["initial"])
 
         # Secondary signals switches
-        self.oil_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Oil Temperature")
+        """ self.oil_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Oil Temperature")
         self.oil_temperature_switch.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="nsw")
         self.inlet_temperature_switch = ctk.CTkSwitch(master=self.main_signals_frame, text="Inlet Temperature")
         self.inlet_temperature_switch.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="nsw")
@@ -394,8 +440,8 @@ class SecondarySignals(ctk.CTkFrame):
         self.dm1_amber_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="Y", width=40)
         self.dm1_amber_entry.grid(row=8, column=4, padx=(0, 10), pady=5)
         self.dm1_red_entry = ctk.CTkEntry(master=self.main_signals_frame, placeholder_text="N", width=40)
-        self.dm1_red_entry.grid(row=9, column=4, padx=(0, 10), pady=5)
-
+        self.dm1_red_entry.grid(row=9, column=4, padx=(0, 10), pady=5) 
+        
         # Secondary signal initial states
         self.oil_temperature_switch.select()
         self.inlet_temperature_switch.select()
@@ -417,6 +463,29 @@ class SecondarySignals(ctk.CTkFrame):
         self.fuel_used_slider.set(0)
         self.dm1_amber_slider.set(0)
         self.dm1_red_slider.set(0)
+        """
+
+    def print_value(self, value):
+        val_list = []
+        for i in range(9):
+            val = self.secondary_values[i].get()
+            val_list.append(val)
+        print(val_list)
+
+    def switch_command(self, signal):
+        print("Switch")
+        
+        if self.secondary_switches[signal].get() == 0:
+            self.secondary_sliders[signal].configure(state="disabled")
+            self.secondary_sliders[signal].set(0)
+            self.secondary_entries[signal].configure(state="disabled")
+        else:
+            self.secondary_sliders[signal].configure(state="normal")
+            self.secondary_entries[signal].configure(state="normal")
+
+
+    def create_switch_command(self, i):
+        return lambda: self.switch_command(i)
 
     def slider_event2(self, value, variable):
         self.values2[variable] = value
