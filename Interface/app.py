@@ -2,7 +2,6 @@ import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
-import numpy as np
 
 
 # Set interface appearance mode: "Dark", "Light"
@@ -17,7 +16,7 @@ ctk.set_appearance_mode(appearance_mode)
 ctk.set_default_color_theme(os.path.abspath("generac_theme.json"))
 
 
-class App(ctk.CTk):     # App class, main interface, calls other frame classes into 3 grids
+class App(ctk.CTk):                         # App class, main interface, calls other classes into 3 grids
     def __init__(self):
         super().__init__()
 
@@ -42,7 +41,7 @@ class App(ctk.CTk):     # App class, main interface, calls other frame classes i
         self.logo_frame = LogoFrame(self.left_grid)
         self.logo_frame.grid(column=0, row=0, sticky="nsew", pady=(0, 10))
         # Engine selector frame
-        self.engine_selector_frame = EngineSelector(self.left_grid)
+        self.engine_selector_frame = EngineSelector(self.left_grid, self)
         self.engine_selector_frame.grid(column=0, row=1, sticky="nsew", pady=10)
         # Start/stop frame
         self.start_stop_frame = StartStop(self.left_grid)
@@ -75,6 +74,11 @@ class App(ctk.CTk):     # App class, main interface, calls other frame classes i
         self.secondary_signals_frame = SecondarySignals(self.right_grid)
         self.secondary_signals_frame.grid(column=0, row=0, sticky="nsew", pady=(0))    
 
+    def set_signal_switches(self, main_switch_states, switch_states):
+        print("Hello from App!")
+        self.main_signals_frame.set_switches(main_switch_states)
+        self.secondary_signals_frame.set_switches(switch_states)
+
 
 class LogoFrame(ctk.CTkFrame):              # Logo frame class
     def __init__(self,master):
@@ -94,9 +98,10 @@ class LogoFrame(ctk.CTkFrame):              # Logo frame class
 
 
 class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
-    def __init__(self,master):
+    def __init__(self, master, app):
         super().__init__(master)
 
+        self.app = app
         # Engine selector frame configuration
         self.engine_selector_frame = ctk.CTkFrame(master)
         self.engine_selector_frame.grid(sticky="nsew", pady=10)
@@ -111,12 +116,13 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         self.engine_range_menu.grid(column=0, row=1, padx=10, pady=5)
         self.engine_range_menu.set("Engine Range")
         # Engine model menu
-        self.engine_model_menu = ctk.CTkOptionMenu(self.engine_selector_frame, values=["Engine Model", "1", "2", "3"])
+        self.engine_model_menu = ctk.CTkOptionMenu(self.engine_selector_frame, values=["Engine Model", "1", "2", "3"], command=self.select_engine_model)
         self.engine_model_menu.grid(column=0, row=2, padx=10, pady=5)
 
         # Set default values
         self.engine_model_menu.configure(state="disabled")
         self.engine_model_menu.set("Engine Model")
+        self.switch_states = [0 for _ in range(9)]
 
     def select_engine_range(self, value):   # Function called by engine_range_menu with an engine range
         if value == "MTU":
@@ -128,8 +134,29 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         else:
             self.engine_model_menu.configure(state="disabled", values=["Engine Model"])
 
+    def select_engine_model(self, value):   # Function called by engine_range_menu with an engine range
+        self.main_switch_states = [1, 1, 1, 1]
+        if value == "ADEC":
+            self.switch_states = [1, 1, 1, 1, 1, 0, 0, 1, 1]
+        elif value == "MDEC":
+            self.switch_states = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+        elif value == "ECU8":
+            self.switch_states = [0, 0, 0, 1, 0, 0, 0, 1, 1]
+        elif value == "1300":
+            self.switch_states = [1, 0, 0, 1, 0, 0, 0, 1, 1]
+        elif value == "ADEM3":
+            self.switch_states = [0, 1, 1, 1, 0, 1, 0, 1, 1]
+        elif value == "ADEM4":
+            self.switch_states = [0, 1, 1, 1, 0, 1, 1, 1, 1]
+        elif value == "S6":
+            self.switch_states = [1, 1, 0, 1, 0, 1, 0, 1, 1]
+        else:
+            self.main_switch_states = [0, 0, 0, 0]
+            
+        self.app.set_signal_switches(self.main_switch_states, self.switch_states)
+    
 
-class StartStop(ctk.CTkFrame):
+class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
     def __init__(self,master):
         super().__init__(master)
 
@@ -154,7 +181,7 @@ class StartStop(ctk.CTkFrame):
         print("Communication Stopped")
 
 
-class EngineImageAndInfo(ctk.CTkFrame):
+class EngineImageAndInfo(ctk.CTkFrame):     # Class for displaying basic engine info
     def __init__(self,master):
         super().__init__(master)
 
@@ -169,7 +196,7 @@ class EngineImageAndInfo(ctk.CTkFrame):
         self.image_info_label.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
 
-class MainSignals(ctk.CTkFrame):
+class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, puts values into a list
     def __init__(self,master):
         super().__init__(master)
 
@@ -217,12 +244,13 @@ class MainSignals(ctk.CTkFrame):
             self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
             self.main_sliders.append(self.slider)
             # Signal textbox entry
-            self.entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_values[i])
+            self.entry = ctk.CTkEntry(master=self.main_signals_frame, width=46, textvariable=self.main_values[i])
             self.entry.grid(row=signal_row, column=4, padx=(0,10), pady=5)
             self.main_entries.append(self.entry)
             # Default values
-            self.switch.select()
             self.slider.set(signal_data["initial"])
+            self.main_sliders[i].configure(state="disabled", button_color="gray")
+            self.main_entries[i].configure(state="disabled")
     
     def print_values(self, value):
         val_list = []
@@ -234,19 +262,30 @@ class MainSignals(ctk.CTkFrame):
     def switch_command(self, signal):
         print("Switch")
         if self.main_switches[signal].get() == 0:
-            self.main_sliders[signal].configure(state="disabled")
+            self.main_sliders[signal].configure(state="disabled", button_color="gray")
             self.main_sliders[signal].set(0)
             self.main_entries[signal].configure(state="disabled")
         else:
-            self.main_sliders[signal].configure(state="normal")
+            self.main_sliders[signal].configure(state="normal", button_color="#bf6d3a")
+            self.main_sliders[signal].set(50)
             self.main_entries[signal].configure(state="normal")
         self.print_values(0)
 
     def create_switch_command(self, i):
         return lambda: self.switch_command(i)
+    
+    def set_switches(self, switch_states):
+        i = 0
+        for state in switch_states:
+            if state == 0:
+                self.main_switches[i].deselect()
+            else:
+                self.main_switches[i].select()
+            self.switch_command(i)
+            i += 1
 
 
-class SecondarySignals(ctk.CTkFrame):
+class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn certain sliders on/off
     def __init__(self,master):
         super().__init__(master)
 
@@ -299,12 +338,14 @@ class SecondarySignals(ctk.CTkFrame):
             self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
             self.secondary_sliders.append(self.slider)
             # Signal textbox entry
-            self.entry = ctk.CTkEntry(master=self.secondary_signals_frame, width=50, textvariable=self.secondary_values[i])
+            self.entry = ctk.CTkEntry(master=self.secondary_signals_frame, width=46, textvariable=self.secondary_values[i])
             self.entry.grid(row=signal_row, column=4, padx=(0,10), pady=5)
             self.secondary_entries.append(self.entry)
             # Default values
-            self.switch.select()
             self.slider.set(signal_data["initial"])
+            self.secondary_sliders[i].configure(state="disabled", button_color="gray")
+            self.secondary_entries[i].configure(state="disabled")
+        
 
     def print_values(self, value):
         val_list = []
@@ -316,20 +357,25 @@ class SecondarySignals(ctk.CTkFrame):
     def switch_command(self, signal):
         print("Switch")
         if self.secondary_switches[signal].get() == 0:
-            self.secondary_sliders[signal].configure(state="disabled")
+            self.secondary_sliders[signal].configure(state="disabled", button_color="gray")
             self.secondary_sliders[signal].set(0)
             self.secondary_entries[signal].configure(state="disabled")
         else:
-            self.secondary_sliders[signal].configure(state="normal")
+            self.secondary_sliders[signal].configure(state="normal", button_color="#bf6d3a")
+            self.secondary_sliders[signal].set(50)
             self.secondary_entries[signal].configure(state="normal")
         self.print_values(0)
 
     def create_switch_command(self, i):
         return lambda: self.switch_command(i)
 
-    def slider_event2(self, value, variable):
-        self.values2[variable] = value
-        val2 = self.values2[variable]
-        print(self.values2)
-
+    def set_switches(self, switch_states):
+        i = 0
+        for state in switch_states:
+            if state == 0:
+                self.secondary_switches[i].deselect()
+            else:
+                self.secondary_switches[i].select()
+            self.switch_command(i)
+            i += 1
 
