@@ -185,8 +185,12 @@ class MainSignals(ctk.CTkFrame):
         self.main_signals_label.grid(row=0, column=0, columnspan=5, padx=(10, 5), pady=5, sticky="nsew")
         
 
-        # Matrix that stores main signal values
+        # List that stores main signal values
         self.main_values = [ctk.DoubleVar() for _ in range(4)]
+        # List with main switches, sliders and entries
+        self.main_switches = []
+        self.main_sliders = []
+        self.main_entries = []
 
         # Matrix used in setup with data for each main signal
         self.main_signals_setup = [
@@ -198,22 +202,26 @@ class MainSignals(ctk.CTkFrame):
 
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
         for signal_data in self.main_signals_setup:
+            signal_row = signal_data["row"]
+            i = signal_row - 1
             # Signal switch with label
-            self.switch = ctk.CTkSwitch(master=self.main_signals_frame, text=signal_data["text"], command=self.switch_command)
-            self.switch.grid(row=signal_data["row"], column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
-            setattr(self, f"{signal_data['text'].lower().replace(' ', '_')}_switch", self.switch)
+            self.switch = ctk.CTkSwitch(master=self.main_signals_frame, text=signal_data["text"], command=self.create_switch_command(i))
+            self.switch.grid(row=signal_row, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
+            self.main_switches.append(self.switch)
             # Initial value label
             self.initial_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["initial"]))
-            self.initial_label.grid(row=signal_data["row"], column=1, padx=(5, 0), pady=5, sticky="nsew")
+            self.initial_label.grid(row=signal_row, column=1, padx=(5, 0), pady=5, sticky="nsew")
             # Final value label
             self.final_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["final"]))
-            self.final_label.grid(row=signal_data["row"], column=3, padx=(0, 5), pady=5, sticky="nsew")
+            self.final_label.grid(row=signal_row, column=3, padx=(0, 5), pady=5, sticky="nsew")
             # Signal slider
-            self.slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[signal_data["row"]-1], command=self.print_value)
-            self.slider.grid(row=signal_data["row"], column=2, padx=2, pady=5, sticky="ew")
+            self.slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[i], command=self.print_value)
+            self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
+            self.main_sliders.append(self.slider)
             # Signal textbox entry
-            self.entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_values[signal_data["row"]-1])
-            self.entry.grid(row=signal_data["row"], column=4, padx=(0,10), pady=5)
+            self.entry = ctk.CTkEntry(master=self.main_signals_frame, width=50, textvariable=self.main_values[i])
+            self.entry.grid(row=signal_row, column=4, padx=(0,10), pady=5)
+            self.main_entries.append(self.entry)
             # Default values
             self.switch.select()
             self.slider.set(signal_data["initial"])
@@ -256,10 +264,20 @@ class MainSignals(ctk.CTkFrame):
             val_list.append(val)
         print(val_list)
 
-    def switch_command(self):
+    def switch_command(self, signal):
+        print("Switch")
         
-        pass
+        if self.main_switches[signal].get() == 0:
+            self.main_sliders[signal].configure(state="disabled")
+            self.main_entries[signal].configure(state="disabled")
+        else:
+            self.main_sliders[signal].configure(state="normal")
+            self.main_entries[signal].configure(state="normal")
 
+
+
+    def create_switch_command(self, i):
+        return lambda: self.switch_command(i)
 
 class SecondarySignals(ctk.CTkFrame):
     def __init__(self,master):
