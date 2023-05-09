@@ -1,7 +1,7 @@
 #import can
 import numpy
 
-class J1939():
+class DataConverterJ1939():
    def __init__(self):
       super().__init__()
         
@@ -22,10 +22,13 @@ class J1939():
       #Main Signals
       self.engine_speed = main_values[0]
       self.oil_pressure = main_values[1]
-      self.coolant_T = main_values[2]
+      self.coolant_temp = main_values[2]
       self.engine_hours = main_values[3]
       #pasar a cadenas de bytes
       self.byte_chain()
+
+      """ message = self.convert_to_J1939()
+      print(message) """
    
    def byte_chain(self):
       _engine_speed = int(self.engine_speed)
@@ -48,6 +51,38 @@ class J1939():
       print(bytes_coolantT)
       print(bytes_engine_hours)
 
+   """ def convert_to_J1939(self):
+      # Convert the engine speed to a 2-byte integer in units of 0.125 RPM.
+      engine_speed_int = int(self.engine_speed / 0.125)
+      # Convert the integer to two bytes in big-endian byte order.
+      engine_speed_bytes = engine_speed_int.to_bytes(2, byteorder='big')
+      # Construct the J1939 message for engine speed PGN (61444).
+      engine_speed_j1939 = '18FEDF00{:02X}{:02X}'.format(engine_speed_bytes[0], engine_speed_bytes[1])
+      
+      # Convert the oil pressure to a 2-byte integer in units of 0.5 kPa.
+      oil_pressure_int = int(self.oil_pressure / 0.5)
+      # Convert the integer to two bytes in big-endian byte order.
+      oil_pressure_bytes = oil_pressure_int.to_bytes(2, byteorder='big')
+      # Construct the J1939 message for oil pressure PGN (61445).
+      oil_pressure_j1939 = '18FEE000{:02X}{:02X}'.format(oil_pressure_bytes[0], oil_pressure_bytes[1])
+      
+      # Convert the coolant temperature to a 2-byte integer in units of 0.03125 degrees Celsius.
+      coolant_temp_int = int(self.coolant_temp / 0.03125)
+      # Convert the integer to two bytes in little-endian byte order.
+      coolant_temp_bytes = coolant_temp_int.to_bytes(2, byteorder='little')
+      # Construct the J1939 message for coolant temperature PGN (65262).
+      coolant_temp_j1939 = '18FEEE00{:02X}{:02X}'.format(coolant_temp_bytes[1], coolant_temp_bytes[0])
+      
+      # Convert the engine hours to a 4-byte integer in units of 0.05 hours.
+      engine_hours_int = int(self.engine_hours / 0.05)
+      # Convert the integer to four bytes in big-endian byte order.
+      engine_hours_bytes = engine_hours_int.to_bytes(4, byteorder='big')
+      # Construct the J1939 message for engine hours PGN (65253).
+      engine_hours_j1939 = '18FEF500{:02X}{:02X}{:02X}{:02X}'.format(
+         engine_hours_bytes[0], engine_hours_bytes[1], engine_hours_bytes[2], engine_hours_bytes[3])
+      
+      # Return a list containing all the J1939 messages.
+      return [engine_speed_j1939, oil_pressure_j1939, coolant_temp_j1939, engine_hours_j1939] """
 
 
    #se crea el mensaje de can de forma extendida para cada variable (29 bits)

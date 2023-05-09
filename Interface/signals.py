@@ -24,10 +24,10 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
 
         # Matrix used in setup with data for each main signal
         self.main_signals_setup = [
-            {"text": "Engine Speed", "row": 1, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Oil Pressure", "row": 2, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Coolant Temp", "row": 3, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Engine Hours", "row": 4, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Engine Speed", "row": 1, "initial": 0, "final": 100, "steps": 100, "unit": "RPM"},
+            {"text": "Oil Pressure", "row": 2, "initial": 0, "final": 100, "steps": 100, "unit": "kPa"},
+            {"text": "Coolant Temp", "row": 3, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Engine Hours", "row": 4, "initial": 0, "final": 100, "steps": 100, "unit": "hrs"},
         ]
 
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
@@ -44,13 +44,16 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
             # Final value label
             self.final_label = ctk.CTkLabel(self.main_signals_frame, text=str(signal_data["final"]))
             self.final_label.grid(row=signal_row, column=3, padx=(0, 5), pady=5, sticky="nsew")
+            # Unit label
+            self.unit_label = ctk.CTkLabel(self.main_signals_frame, text=signal_data["unit"])
+            self.unit_label.grid(row=signal_row, column=5, padx=(0, 10), pady=5, sticky="nsew")
             # Signal slider
             self.slider = ctk.CTkSlider(self.main_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.main_values[i], command=self.print_values)
             self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
             self.main_sliders.append(self.slider)
             # Signal textbox entry
             self.entry = ctk.CTkEntry(master=self.main_signals_frame, width=46, textvariable=self.main_values[i])
-            self.entry.grid(row=signal_row, column=4, padx=(0,10), pady=5)
+            self.entry.grid(row=signal_row, column=4, padx=(0,5), pady=5)
             self.main_entries.append(self.entry)
             # Default values
             self.slider.set(signal_data["initial"])
@@ -65,7 +68,6 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
         print(val_list)
 
     def switch_command(self, signal):
-        print("Switch")
         if self.main_switches[signal].get() == 0:
             self.main_sliders[signal].configure(state="disabled", button_color="gray")
             self.main_sliders[signal].set(0)
@@ -120,15 +122,15 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
 
         # Matrix used in setup with data for each main signal
         self.secondary_signals_setup = [
-            {"text": "Oil Temp", "row": 1, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Inlet Temp", "row": 2, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Fuel Temp", "row": 3, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Turbo Pressure", "row": 4, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Fuel Pressure", "row": 5, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Fuel Consumption", "row": 6, "initial": 0, "final": 100, "steps": 100},
-            {"text": "Fuel Used", "row": 7, "initial": 0, "final": 100, "steps": 100},
-            {"text": "DM1 Amber", "row": 8, "initial": 0, "final": 100, "steps": 100},
-            {"text": "DM1 Red", "row": 9, "initial": 0, "final": 100, "steps": 100},
+            {"text": "Oil Temp", "row": 1, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Inlet Temp", "row": 2, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Fuel Temp", "row": 3, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Turbo Pressure", "row": 4, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Fuel Pressure", "row": 5, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Fuel Consumption", "row": 6, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Fuel Used", "row": 7, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "DM1 Amber", "row": 8, "initial": 0, "final": 1, "steps": 1, "unit": ""},
+            {"text": "DM1 Red", "row": 9, "initial": 0, "final": 1, "steps": 1, "unit": ""},
         ]
 
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
@@ -145,13 +147,16 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
             # Final value label
             self.final_label = ctk.CTkLabel(self.secondary_signals_frame, text=str(signal_data["final"]))
             self.final_label.grid(row=signal_row, column=3, padx=(0, 5), pady=5, sticky="nsew")
+            # Unit label
+            self.unit_label = ctk.CTkLabel(self.secondary_signals_frame, text=signal_data["unit"])
+            self.unit_label.grid(row=signal_row, column=5, padx=(0, 10), pady=5, sticky="nsew")
             # Signal slider
             self.slider = ctk.CTkSlider(self.secondary_signals_frame, from_=signal_data["initial"], to=signal_data["final"], number_of_steps=signal_data["steps"], variable=self.secondary_values[i], command=self.print_values)
             self.slider.grid(row=signal_row, column=2, padx=2, pady=5, sticky="ew")
             self.secondary_sliders.append(self.slider)
             # Signal textbox entry
             self.entry = ctk.CTkEntry(master=self.secondary_signals_frame, width=46, textvariable=self.secondary_values[i])
-            self.entry.grid(row=signal_row, column=4, padx=(0,10), pady=5)
+            self.entry.grid(row=signal_row, column=4, padx=(0,5), pady=5)
             self.secondary_entries.append(self.entry)
             # Default values
             self.slider.set(signal_data["initial"])
@@ -166,7 +171,6 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
         print(val_list)
 
     def switch_command(self, signal):
-        print("Switch")
         if self.secondary_switches[signal].get() == 0:
             self.secondary_sliders[signal].configure(state="disabled", button_color="gray")
             self.secondary_sliders[signal].set(0)
@@ -185,6 +189,7 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
         for state in switch_states:
             if state == 0:
                 self.secondary_switches[i].deselect()
+                self.secondary_switches[i].configure(state="disabled")
             else:
                 self.secondary_switches[i].select()
             self.switch_command(i)
