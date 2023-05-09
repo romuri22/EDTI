@@ -42,7 +42,7 @@ class App(ctk.CTk):
         self.engine_selector_frame = EngineSelector(self.left_grid, self)
         self.engine_selector_frame.grid(column=0, row=1, sticky="nsew", pady=10)
         # Start/stop frame
-        self.start_stop_frame = StartStop(self.left_grid)
+        self.start_stop_frame = StartStop(self.left_grid, self)
         self.start_stop_frame.grid(column=0, row=2, sticky="nsew", pady=(10, 0))
 
         #------------------------------------------------------------------------------
@@ -75,6 +75,10 @@ class App(ctk.CTk):
     def set_signal_switches(self, main_switch_states, switch_states):
         self.main_signals_frame.set_switches(main_switch_states)
         self.secondary_signals_frame.set_switches(switch_states)
+
+    def get_main_values(self):
+        main_values = self.main_signals_frame.get_main_values()
+        return main_values
 
 
 

@@ -89,6 +89,13 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
             self.switch_command(i)
             i += 1
 
+    def get_main_values(self):
+        val_list = []
+        for i in range(4):
+            val = self.main_values[i].get()
+            val_list.append(val)
+        return val_list
+
 
 class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn certain sliders on/off
     def __init__(self,master):

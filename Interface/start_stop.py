@@ -1,8 +1,10 @@
 import customtkinter as ctk
+from prueba import J1939
 
 class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
-    def __init__(self,master):
+    def __init__(self,master, app):
         super().__init__(master)
+        self.app = app
 
         # Start/stop frame configuration
         self.start_stop_frame = ctk.CTkFrame(master)
@@ -18,8 +20,14 @@ class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
         self.stop_button = ctk.CTkButton(self.start_stop_frame, text="STOP", command=self.stop_communication)
         self.stop_button.grid(column=0, row=2, padx=10, pady=5)
 
+        self.converter = J1939()
+        #self.converter.main_signals(main_signals)
+
     def start_communication(self):
         print("Communication Started")
+        main_values = self.app.get_main_values()
+        self.converter.set_main_values(main_values)
+
 
     def stop_communication(self):
         print("Communication Stopped")
