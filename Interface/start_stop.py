@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from data_converter import DataConverterJ1939
+from message_creator import MessageCreator
 
 class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
     def __init__(self,master, app):
@@ -20,14 +20,14 @@ class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
         self.stop_button = ctk.CTkButton(self.start_stop_frame, text="STOP", command=self.stop_communication)
         self.stop_button.grid(column=0, row=2, padx=10, pady=5)
 
-        self.data_converter = DataConverterJ1939()
-        #self.converter.main_signals(main_signals)
+        self.message_creator = MessageCreator()
 
     def start_communication(self):
         print("Communication Started")
         values = self.app.get_values()
-        self.data_converter.set_values(values)
         print(values)
+        self.message_creator.create_J1939_messages(values)
+   
 
 
     def stop_communication(self):
