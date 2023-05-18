@@ -25,8 +25,9 @@ class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
 
     def start_communication(self):
         print("Communication Started")
-        main_values = self.app.get_main_values()
-        self.data_converter.set_main_values(main_values)
+        values = self.app.get_values()
+        self.data_converter.set_values(values)
+        print(values)
 
 
     def stop_communication(self):

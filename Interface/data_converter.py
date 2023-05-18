@@ -1,16 +1,22 @@
-#import can
+import can
 import numpy
 
 class DataConverterJ1939():
    def __init__(self):
       super().__init__()
         
+      self.SPN_info = [
+         {"text": "Engine Speed", "pgn": 61444, "CANID": 0x0CF004, "length bits": 16, "start": 4},
+         {"text": "Inlet Temp", "row": 2, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+      ]
+      
+
       self.pgn_engine_speed=61444
       self.pgn_oil_pressure=65263
       self.pgn_coolant_T=65262
       self.pgn_engine_hours=65253
 
-        #bus = can.interface.Bus(channel='can0', bustype='socketcan')
+      #bus = can.interface.Bus(channel='can0', bustype='socketcan')
 
       #Se determina la ID de can
       self.canID_engine_speed=(self.pgn_engine_speed<<8) | 0x18  #18 bits=2 bytes, al pasar una cadena a pgn se usan dos bytes lo que significa que se deben recorrer 8 lugares en total (8 bits por byte x 2 bytes = 16 bits = 2 bytes).
@@ -18,7 +24,7 @@ class DataConverterJ1939():
       self.canID_coolant_T=(self.pgn_coolant_T<<8) | 0x18
       self.canID_engine_hours=(self.pgn_engine_hours<<8) | 0x18
 
-   def set_main_values(self, main_values):
+   def set_values(self, main_values):
       #Main Signals
       self.engine_speed = main_values[0]
       self.oil_pressure = main_values[1]
@@ -33,7 +39,7 @@ class DataConverterJ1939():
    def byte_chain(self):
       _engine_speed = int(self.engine_speed)
       _oil_pressure = int(self.oil_pressure)
-      _coolant_T = int(self.coolant_T)
+      _coolant_T = int(self.coolant_temp)
       _engine_hours = int(self.engine_hours)
       bytes_engine_speed = _engine_speed.to_bytes(2,byteorder='big') # En caso de utilizar big se almacenan los bytes mas significativos en la memoria y little es para almacenar los bytes menos significativos de primerp.
       bytes_oil_pressure = _oil_pressure.to_bytes(1,byteorder='big') #segun el data lenght se agrega en el parentesis 

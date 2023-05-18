@@ -24,10 +24,10 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
 
         # Matrix used in setup with data for each main signal
         self.main_signals_setup = [
-            {"text": "Engine Speed", "row": 1, "initial": 0, "final": 100, "steps": 100, "unit": "RPM"},
-            {"text": "Oil Pressure", "row": 2, "initial": 0, "final": 100, "steps": 100, "unit": "kPa"},
-            {"text": "Coolant Temp", "row": 3, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
-            {"text": "Engine Hours", "row": 4, "initial": 0, "final": 100, "steps": 100, "unit": "hrs"},
+            {"text": "Engine Speed", "row": 1, "initial": 0, "final": 2000, "steps": 16000, "unit": "rpm"},
+            {"text": "Oil Pressure", "row": 2, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "Coolant Temp", "row": 3, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Engine Hours", "row": 4, "initial": 0, "final": 10000, "steps": 200000, "unit": "hr"},
         ]
 
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
@@ -122,13 +122,13 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
 
         # Matrix used in setup with data for each main signal
         self.secondary_signals_setup = [
-            {"text": "Oil Temp", "row": 1, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
-            {"text": "Inlet Temp", "row": 2, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
-            {"text": "Fuel Temp", "row": 3, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
-            {"text": "Turbo Pressure", "row": 4, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
-            {"text": "Fuel Pressure", "row": 5, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
-            {"text": "Fuel Consumption", "row": 6, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
-            {"text": "Fuel Used", "row": 7, "initial": 0, "final": 100, "steps": 100, "unit": "ºC"},
+            {"text": "Oil Temp", "row": 1, "initial": -273, "final": 1500, "steps": 56736, "unit": "ºC"},
+            {"text": "Inlet Temp", "row": 2, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Fuel Temp", "row": 3, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Turbo Pressure", "row": 4, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "Fuel Pressure", "row": 5, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "Fuel Rate", "row": 6, "initial": 0, "final": 3000, "steps": 60000, "unit": "L/h"},
+            {"text": "Fuel Used", "row": 7, "initial": 0, "final": 1000, "steps": 20000, "unit": "L"},
             {"text": "DM1 Amber", "row": 8, "initial": 0, "final": 1, "steps": 1, "unit": ""},
             {"text": "DM1 Red", "row": 9, "initial": 0, "final": 1, "steps": 1, "unit": ""},
         ]
@@ -177,7 +177,7 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
             self.secondary_entries[signal].configure(state="disabled")
         else:
             self.secondary_sliders[signal].configure(state="normal", button_color="#bf6d3a")
-            self.secondary_sliders[signal].set(50)
+            #self.secondary_sliders[signal].set(50)
             self.secondary_entries[signal].configure(state="normal")
         self.print_values(0)
 
@@ -191,7 +191,14 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
                 self.secondary_switches[i].deselect()
                 self.secondary_switches[i].configure(state="disabled")
             else:
+                self.secondary_switches[i].configure(state="enabled")
                 self.secondary_switches[i].select()
             self.switch_command(i)
             i += 1
 
+    def get_secondary_values(self):
+        val_list = []
+        for i in range(9):
+            val = self.secondary_values[i].get()
+            val_list.append(val)
+        return val_list

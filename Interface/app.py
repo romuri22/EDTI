@@ -76,10 +76,11 @@ class App(ctk.CTk):
         self.main_signals_frame.set_switches(main_switch_states)
         self.secondary_signals_frame.set_switches(switch_states)
 
-    def get_main_values(self):
-        main_values = self.main_signals_frame.get_main_values()
-        return main_values
-
-
+    def get_values(self):
+        values = self.main_signals_frame.get_main_values()
+        secondary_values = self.secondary_signals_frame.get_secondary_values()
+        for value in secondary_values:
+            values.append(value)
+        return values
 
 
