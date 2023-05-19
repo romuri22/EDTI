@@ -74,7 +74,7 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
             self.main_entries[signal].configure(state="disabled")
         else:
             self.main_sliders[signal].configure(state="normal", button_color="#bf6d3a")
-            self.main_sliders[signal].set(50)
+            self.main_sliders[signal].set(0)
             self.main_entries[signal].configure(state="normal")
         self.print_values(0)
 
@@ -177,7 +177,7 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
             self.secondary_entries[signal].configure(state="disabled")
         else:
             self.secondary_sliders[signal].configure(state="normal", button_color="#bf6d3a")
-            #self.secondary_sliders[signal].set(50)
+            self.secondary_sliders[signal].set(0)
             self.secondary_entries[signal].configure(state="normal")
         self.print_values(0)
 

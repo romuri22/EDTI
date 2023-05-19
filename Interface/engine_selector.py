@@ -29,6 +29,8 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         self.switch_states = [0 for _ in range(9)]
 
     def select_engine_range(self, value):   # Function called by engine_range_menu with an engine range
+        self.engine_range = value
+        self.engine_model_menu.set("Engine Model")
         if value == "MTU":
             self.engine_model_menu.configure(state="enabled", values=["ADEC", "MDEC", "ECU8"])
         elif value == "Perkins":
@@ -40,6 +42,7 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
 
     def select_engine_model(self, value):   # Function called by engine_range_menu with an engine range
         self.main_switch_states = [1, 1, 1, 1]
+        engine_series = value
         if value == "ADEC":
             self.switch_states = [1, 1, 1, 1, 1, 0, 0, 1, 1]
         elif value == "MDEC":
@@ -57,5 +60,5 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         else:
             self.main_switch_states = [0, 0, 0, 0]
             
-        self.app.set_signal_switches(self.main_switch_states, self.switch_states)
+        self.app.set_signal_switches(self.main_switch_states, self.switch_states, self.engine_range, engine_series)
 

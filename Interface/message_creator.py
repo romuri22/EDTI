@@ -1,7 +1,7 @@
 import can
 
 
-class MessageCreator():
+class MessageCreator():                     # Message creator class
    def __init__(self):
       
       # Parameters for each signal sent
@@ -35,10 +35,10 @@ class MessageCreator():
       ]
 
    # Function that scales a value to a resolution, converts to hex (little endian),
-   # and adds it to the correct byte(s) in a data list.
-   def add_to_pgn_data(self, decimal, res, data_list, start, length):
+   # and adds it to the correct byte(s) in a PGN's data list.
+   def add_to_pgn_data(self, decimal, res, offset, data_list, start, length):
       # Scale value to resolution, round to convert to int
-      scaled = round(decimal / res)
+      scaled = round((decimal - offset) / res)
       # Convert decimal to bytes in big-endian byte order
       new_data = scaled.to_bytes((scaled.bit_length() + 7) // 8, 'little')
       byte_data = bytearray(new_data)
@@ -73,9 +73,10 @@ class MessageCreator():
             value = values[signal]
             print(self.SPN_info[signal]["text"], ": ", value)
             res = self.SPN_info[signal]["res"]           # Signal resolution
+            offset = self.SPN_info[signal]["offset"]     # Signal offset
             start = self.SPN_info[signal]["start"] - 1   # Starting byte inside the 8-byte array
             length = self.SPN_info[signal]["length"]     # Length in bytes
-            data = self.add_to_pgn_data(value, res, data, start, length)
+            data = self.add_to_pgn_data(value, res, offset, data, start, length)
          # With the id and data, creates a can message
          can_message = self.create_can_message(can_id, data)
          print("-------------------")

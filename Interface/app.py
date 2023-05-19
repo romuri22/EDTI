@@ -72,9 +72,10 @@ class App(ctk.CTk):
         self.secondary_signals_frame = SecondarySignals(self.right_grid)
         self.secondary_signals_frame.grid(column=0, row=0, sticky="nsew", pady=(0))    
 
-    def set_signal_switches(self, main_switch_states, switch_states):
+    def set_signal_switches(self, main_switch_states, switch_states, engine_range, engine_series):
         self.main_signals_frame.set_switches(main_switch_states)
         self.secondary_signals_frame.set_switches(switch_states)
+        self.image_info_frame.set_image(engine_range, engine_series)
 
     def get_values(self):
         values = self.main_signals_frame.get_main_values()
