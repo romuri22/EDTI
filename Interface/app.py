@@ -83,5 +83,3 @@ class App(ctk.CTk):
         for value in secondary_values:
             values.append(value)
         return values
-
-

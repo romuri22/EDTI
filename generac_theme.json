@@ -48,7 +48,7 @@
       "corner_radius": 1000,
       "border_width": 3,
       "button_length": 0,
-      "fg_Color": ["#a29993", "#504c4a"],
+      "fg_color": ["#a29993", "#504c4a"],
       "progress_color": ["#bf6d3a", "#8d491f"],
       "button_color": ["gray36", "#ded8d5"],
       "button_hover_color": ["gray20", "gray100"],

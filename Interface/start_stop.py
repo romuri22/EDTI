@@ -24,12 +24,17 @@ class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
 
     def start_communication(self):
         print("Communication Started")
-        values = self.app.get_values()
-        print(values)
-        self.message_creator.create_J1939_messages(values)
-   
-
+        self.running = True
+        self.send_messages()
 
     def stop_communication(self):
         print("Communication Stopped")
+        self.running = False
 
+    def send_messages(self):
+        if self.running:
+            values = self.app.get_values()
+            print(values)
+            self.message_creator.start_communication(values)
+
+        self.after(100, self.send_messages)

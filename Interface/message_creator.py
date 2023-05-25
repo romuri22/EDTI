@@ -1,5 +1,5 @@
 import can
-
+import time
 
 class MessageCreator():                     # Message creator class
    def __init__(self):
@@ -23,16 +23,19 @@ class MessageCreator():                     # Message creator class
 
       # Paramers and signals included for each PGN, id's are taken from J1939-71 standard
       self.PGN_info = [
-         {"pgn": 61444, "can_id": 0x0CF00401, "signals": [0]},
-         {"pgn": 65263, "can_id": 0x18FEEF01, "signals": [1, 8]},
-         {"pgn": 65262, "can_id": 0x18FEEE01, "signals": [2, 4, 6]},
-         {"pgn": 65253, "can_id": 0x18FEE501, "signals": [3]},
-         {"pgn": 65269, "can_id": 0x18FEF501, "signals": [5]},
-         {"pgn": 65245, "can_id": 0x18FEDD01, "signals": [7]},
-         {"pgn": 65266, "can_id": 0x18FEF201, "signals": [9]},
-         {"pgn": 65257, "can_id": 0x18FEE901, "signals": [10]},
+         {"pgn": 61444, "can_id": 0x0CF00411, "signals": [0]},
+         {"pgn": 65263, "can_id": 0x18FEEF11, "signals": [1, 8]},
+         {"pgn": 65262, "can_id": 0x18FEEE11, "signals": [2, 4, 6]},
+         {"pgn": 65253, "can_id": 0x18FEE511, "signals": [3]},
+         {"pgn": 65269, "can_id": 0x18FEF511, "signals": [5]},
+         {"pgn": 65245, "can_id": 0x18FEDD11, "signals": [7]},
+         {"pgn": 65266, "can_id": 0x18FEF211, "signals": [9]},
+         {"pgn": 65257, "can_id": 0x18FEE911, "signals": [10]},
          #{"pgn": 61441, "can_id": 0x18FEF201, "signals": [11, 12]}
       ]
+
+      #self.bus = can.interface.Bus(interface='seeedstudio', channel='/dev/tty.usbserial-1420', bitrate=125000)
+
 
    # Function that scales a value to a resolution, converts to hex (little endian),
    # and adds it to the correct byte(s) in a PGN's data list.
@@ -62,25 +65,42 @@ class MessageCreator():                     # Message creator class
 
    # Loops through a dictionary to define id and data structure for each pgn.
    def create_J1939_messages(self, values):
+      # Array to store all mesages
+      self.j1939_messages = []
       for pgn in self.PGN_info:
-         print("----------------------------------------------------------------------------------------------------")
-         print("PGN: ", pgn["pgn"])
+         #print("----------------------------------------------------------------------------------------------------")
+         #print("PGN: ", pgn["pgn"])
          # Looks for id for each PGN
          can_id = pgn["can_id"]
          data = bytearray(8)     # Zeros array of 8 bytes
-         # Loops through each signal included in a pgn, obtains value and other parameters
+         # Loops through each signal included in a pgn to write the 8 byte data-chain
          for signal in pgn["signals"]:
+            # Collects all relevant info for each signal
             value = values[signal]
-            print(self.SPN_info[signal]["text"], ": ", value)
+            #print(self.SPN_info[signal]["text"], ": ", value)
             res = self.SPN_info[signal]["res"]           # Signal resolution
             offset = self.SPN_info[signal]["offset"]     # Signal offset
             start = self.SPN_info[signal]["start"] - 1   # Starting byte inside the 8-byte array
             length = self.SPN_info[signal]["length"]     # Length in bytes
+            # Calls add to pgn data to write the signal values to the J1939 data list
             data = self.add_to_pgn_data(value, res, offset, data, start, length)
          # With the id and data, creates a can message
          can_message = self.create_can_message(can_id, data)
-         print("-------------------")
-         print("CAN MESSAGE FOR PGN")
+         # Each pgn message is printed to console and stored in a message array
+         #print("-------------------")
+         #print("CAN MESSAGE FOR PGN")
          print(can_message)
+         #self.j1939_messages.append(can_message)
+         
+      self.send_messages()
+
+   def send_messages(self):
+      for message in self.j1939_messages:
+         #self.bus.send(message)
+         pass
+
+   def start_communication(self, values):
+      self.create_J1939_messages(values)
+
 
 

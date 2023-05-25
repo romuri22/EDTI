@@ -64,19 +64,17 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
         val_list = []
         for i in range(4):
             val = self.main_values[i].get()
-            val_list.append(val)
+            val_list.append(round(val, 2))
         print(val_list)
 
     def switch_command(self, signal):
         if self.main_switches[signal].get() == 0:
             self.main_sliders[signal].configure(state="disabled", button_color="gray")
-            self.main_sliders[signal].set(0)
             self.main_entries[signal].configure(state="disabled")
         else:
             self.main_sliders[signal].configure(state="normal", button_color="#bf6d3a")
-            self.main_sliders[signal].set(0)
             self.main_entries[signal].configure(state="normal")
-        self.print_values(0)
+        self.main_sliders[signal].set(self.main_signals_setup[signal]["initial"])
 
     def create_switch_command(self, i):
         return lambda: self.switch_command(i)
@@ -95,7 +93,7 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
         val_list = []
         for i in range(4):
             val = self.main_values[i].get()
-            val_list.append(val)
+            val_list.append(round(val, 2))
         return val_list
 
 
@@ -167,19 +165,17 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
         val_list = []
         for i in range(9):
             val = self.secondary_values[i].get()
-            val_list.append(val)
+            val_list.append(round(val, 2))
         print(val_list)
 
     def switch_command(self, signal):
         if self.secondary_switches[signal].get() == 0:
             self.secondary_sliders[signal].configure(state="disabled", button_color="gray")
-            self.secondary_sliders[signal].set(0)
             self.secondary_entries[signal].configure(state="disabled")
         else:
             self.secondary_sliders[signal].configure(state="normal", button_color="#bf6d3a")
-            self.secondary_sliders[signal].set(0)
             self.secondary_entries[signal].configure(state="normal")
-        self.print_values(0)
+        self.secondary_sliders[signal].set(self.secondary_signals_setup[signal]["initial"])
 
     def create_switch_command(self, i):
         return lambda: self.switch_command(i)
@@ -200,5 +196,5 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
         val_list = []
         for i in range(9):
             val = self.secondary_values[i].get()
-            val_list.append(val)
+            val_list.append(round(val, 2))
         return val_list
