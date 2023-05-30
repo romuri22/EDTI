@@ -101,6 +101,9 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
     def __init__(self,master):
         super().__init__(master)
 
+        self.ATMOS_PRESSURE = 101.325
+        self.RATED_SPEED = 1800
+
         # Secondary signals frame configuration
         self.secondary_signals_frame = ctk.CTkFrame(master)
         self.secondary_signals_frame.grid(sticky="nsew")
@@ -121,14 +124,13 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
         # Matrix used in setup with data for each main signal
         self.secondary_signals_setup = [
             {"text": "Oil Temp", "row": 1, "initial": -273, "final": 1500, "steps": 56736, "unit": "ºC"},
-            {"text": "Inlet Temp", "row": 2, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
-            {"text": "Fuel Temp", "row": 3, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
-            {"text": "Turbo Pressure", "row": 4, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
-            {"text": "Fuel Pressure", "row": 5, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
-            {"text": "Fuel Rate", "row": 6, "initial": 0, "final": 3000, "steps": 60000, "unit": "L/h"},
-            {"text": "Fuel Used", "row": 7, "initial": 0, "final": 1000, "steps": 20000, "unit": "L"},
-            {"text": "DM1 Amber", "row": 8, "initial": 0, "final": 1, "steps": 1, "unit": ""},
-            {"text": "DM1 Red", "row": 9, "initial": 0, "final": 1, "steps": 1, "unit": ""},
+            {"text": "Coolant Pressure", "row": 2, "initial": 0, "final": 500, "steps": 250, "unit": "kPa"},
+            {"text": "Inlet Temp", "row": 3, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Fuel Temp", "row": 4, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Turbo Pressure", "row": 5, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "Fuel Pressure", "row": 6, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "DM1 Amber", "row": 7, "initial": 0, "final": 1, "steps": 1, "unit": ""},
+            {"text": "DM1 Red", "row": 8, "initial": 0, "final": 1, "steps": 1, "unit": ""},
         ]
 
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
@@ -194,7 +196,9 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
 
     def get_secondary_values(self):
         val_list = []
-        for i in range(9):
+        for i in range(8):
             val = self.secondary_values[i].get()
             val_list.append(round(val, 2))
+        val_list.append(self.ATMOS_PRESSURE)
+        val_list.append(self.RATED_SPEED)
         return val_list
