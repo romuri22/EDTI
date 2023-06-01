@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 
-class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
+class EngineSelectorFrame(ctk.CTkFrame):         # Engine selector class with 2 menus
     def __init__(self, master, app):
         super().__init__(master)
 
@@ -20,25 +20,25 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         self.engine_range_menu.grid(column=0, row=1, padx=10, pady=5)
         self.engine_range_menu.set("Engine Range")
         # Engine model menu
-        self.engine_model_menu = ctk.CTkOptionMenu(self.engine_selector_frame, command=self.select_engine_model)
-        self.engine_model_menu.grid(column=0, row=2, padx=10, pady=5)
+        self.engine_series_menu = ctk.CTkOptionMenu(self.engine_selector_frame, command=self.select_engine_model)
+        self.engine_series_menu.grid(column=0, row=2, padx=10, pady=5)
 
         # Set default values
-        self.engine_model_menu.configure(state="disabled")
-        self.engine_model_menu.set("Engine Series")
+        self.engine_series_menu.configure(state="disabled")
+        self.engine_series_menu.set("Engine Series")
         self.switch_states = [0 for _ in range(9)]
 
     def select_engine_range(self, value):   # Function called by engine_range_menu with an engine range
         self.engine_range = value
-        self.engine_model_menu.set("Engine Series")
+        self.engine_series_menu.set("Engine Series")
         if value == "MTU":
-            self.engine_model_menu.configure(state="enabled", values=["ADEC", "MDEC", "ECU8"])
+            self.engine_series_menu.configure(state="enabled", values=["ADEC", "MDEC", "ECU8"])
         elif value == "Perkins":
-            self.engine_model_menu.configure(state="enabled", values=["1300", "ADEM3", "ADEM4"])
+            self.engine_series_menu.configure(state="enabled", values=["1300", "ADEM3", "ADEM4"])
         elif value == "Scania":
-            self.engine_model_menu.configure(state="enabled", values=["S6"])
+            self.engine_series_menu.configure(state="enabled", values=["S6"])
         else:
-            self.engine_model_menu.configure(state="disabled", values=["Engine Series"])
+            self.engine_series_menu.configure(state="disabled", values=["Engine Series"])
 
     def select_engine_model(self, value):   # Function called by engine_range_menu with an engine range
         self.main_switch_states = [1, 1, 1, 1]
@@ -60,5 +60,5 @@ class EngineSelector(ctk.CTkFrame):         # Engine selector class with 2 menus
         else:
             self.main_switch_states = [0, 0, 0, 0]
             
-        self.app.set_signal_switches(self.main_switch_states, self.switch_states, self.engine_range, engine_series)
+        self.app.set_engine(self.main_switch_states, self.switch_states, self.engine_range, engine_series)
 

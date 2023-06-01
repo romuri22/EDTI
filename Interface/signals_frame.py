@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 
-class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, puts values into a list
+class MainSignalsFrame(ctk.CTkFrame):            # Class with main signals sliders, puts values into a list
     def __init__(self,master):
         super().__init__(master)
 
@@ -24,16 +24,15 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
 
         # Matrix used in setup with data for each main signal
         self.main_signals_setup = [
-            {"text": "Engine Speed", "row": 1, "initial": 0, "final": 2000, "steps": 16000, "unit": "rpm"},
-            {"text": "Oil Pressure", "row": 2, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
-            {"text": "Coolant Temp", "row": 3, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
-            {"text": "Engine Hours", "row": 4, "initial": 0, "final": 10000, "steps": 200000, "unit": "hr"},
+            {"text": "Engine Speed", "initial": 0, "final": 2000, "steps": 16000, "unit": "rpm"},
+            {"text": "Oil Pressure", "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "Coolant Temp", "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Engine Hours", "initial": 0, "final": 10000, "steps": 200000, "unit": "hr"},
         ]
 
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
-        for signal_data in self.main_signals_setup:
-            signal_row = signal_data["row"]
-            i = signal_row - 1
+        for i, signal_data in enumerate(self.main_signals_setup):
+            signal_row = i + 1
             # Signal switch with label
             self.switch = ctk.CTkSwitch(master=self.main_signals_frame, text=signal_data["text"], command=self.create_switch_command(i))
             self.switch.grid(row=signal_row, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")
@@ -97,7 +96,7 @@ class MainSignals(ctk.CTkFrame):            # Class with main signals sliders, p
         return val_list
 
 
-class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn certain sliders on/off
+class SecondarySignalsFrame(ctk.CTkFrame):       # Similar to MainSignals, can turn certain sliders on/off
     def __init__(self,master):
         super().__init__(master)
 
@@ -123,20 +122,19 @@ class SecondarySignals(ctk.CTkFrame):       # Similar to MainSignals, can turn c
 
         # Matrix used in setup with data for each main signal
         self.secondary_signals_setup = [
-            {"text": "Oil Temp", "row": 1, "initial": -273, "final": 1500, "steps": 56736, "unit": "ºC"},
-            {"text": "Coolant Pressure", "row": 2, "initial": 0, "final": 500, "steps": 250, "unit": "kPa"},
-            {"text": "Inlet Temp", "row": 3, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
-            {"text": "Fuel Temp", "row": 4, "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
-            {"text": "Turbo Pressure", "row": 5, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
-            {"text": "Fuel Pressure", "row": 6, "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
-            {"text": "DM1 Amber", "row": 7, "initial": 0, "final": 1, "steps": 1, "unit": ""},
-            {"text": "DM1 Red", "row": 8, "initial": 0, "final": 1, "steps": 1, "unit": ""},
+            {"text": "Oil Temp", "initial": -273, "final": 1500, "steps": 56736, "unit": "ºC"},
+            {"text": "Coolant Pressure", "initial": 0, "final": 500, "steps": 250, "unit": "kPa"},
+            {"text": "Inlet Temp", "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Fuel Temp", "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
+            {"text": "Turbo Pressure", "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "Fuel Pressure", "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
+            {"text": "DM1 Amber", "initial": 0, "final": 1, "steps": 1, "unit": ""},
+            {"text": "DM1 Red", "initial": 0, "final": 1, "steps": 1, "unit": ""},
         ]
 
         # For loop to create switch, initial and final value labels, slider, and textbox for each signal
-        for signal_data in self.secondary_signals_setup:
-            signal_row = signal_data["row"]
-            i = signal_row - 1
+        for i, signal_data in enumerate(self.secondary_signals_setup):
+            signal_row = i + 1
             # Signal switch with label
             self.switch = ctk.CTkSwitch(master=self.secondary_signals_frame, text=signal_data["text"], command=self.create_switch_command(i))
             self.switch.grid(row=signal_row, column=0, padx=(10, 5), pady=(5, 10), sticky="nsw")

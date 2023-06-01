@@ -2,7 +2,7 @@ import customtkinter as ctk
 from message_creator import MessageCreator
 import time
 
-class StartStop(ctk.CTkFrame):              # Start/stop class with 2 buttons
+class StartStopFrame(ctk.CTkFrame):              # Start/stop class with 2 buttons
     def __init__(self,master, app):
         super().__init__(master)
         self.app = app

@@ -16,8 +16,8 @@ class MessageCreator():                     # Message creator class
          {"text": "Fuel Temp",      "level": "byte", "length": 1, "start": 2, "res": 1,       "offset": -40},
          {"text": "Turbo Pressure", "level": "byte", "length": 1, "start": 2, "res": 4,       "offset": 0},
          {"text": "Fuel Pressure",  "level": "byte", "length": 1, "start": 1, "res": 4,       "offset": 0},
-         {"text": "DM1 Amber",      "level": "bit", "length": 0.2, "start": 6.5, "res": 1,    "offset": 0},
-         {"text": "DM1 Red",        "level": "bit", "length": 0.2, "start": 6.3, "res": 1,    "offset": 0},
+         {"text": "DM1 Amber",      "level": "bit",  "length":0.2,"start":6.5,"res": 1,    "offset": 0},
+         {"text": "DM1 Red",        "level": "bit",  "length":0.2,"start":6.3,"res": 1,    "offset": 0},
          {"text": "Atmos Pressure", "level": "byte", "length": 2, "start": 1, "res": 0.5,     "offset": 0},
          {"text": "Rated Speed",    "level": "byte", "length": 2, "start": 3, "res": 0.125,   "offset": 0}
       ]
@@ -33,10 +33,15 @@ class MessageCreator():                     # Message creator class
          {"pgn": 65269, "can_id": 0x18FEF500, "signals": [12]},
          {"pgn": 65214, "can_id": 0x19FEBE00, "signals": [13]}
       ]
-      #try:
-      self.bus = can.interface.Bus(interface='seeedstudio', channel='/dev/tty.usbserial-1420', bitrate=250000)
-      #except:
-         #pass
+      try:
+         self.bus = can.interface.Bus(interface='seeedstudio', channel='/dev/tty.usbserial-1420', bitrate=250000)
+      except:
+         try:
+            self.bus = can.interface.Bus(interface='seeedstudio', channel='COM3', bitrate=250000)
+         except:
+            pass
+         pass
+
 
 
    # Function that scales a value to a resolution, converts to hex (little endian),
@@ -72,7 +77,7 @@ class MessageCreator():                     # Message creator class
       can_message = can.Message(
          arbitration_id=can_id,  
          data=can_data,
-         is_rx=False,
+         is_rx=False,            # Rx is for receiver, Tx for transmitter
          is_extended_id=True,    # J1939 standard uses extended can id (29 bits)
       )
       return can_message
@@ -103,13 +108,11 @@ class MessageCreator():                     # Message creator class
          print("-------------------")
          print("CAN MESSAGE FOR PGN")
          print(can_message)
-         #try:
-         self.bus.send(can_message)
-         #except:
-            #pass
+         try:
+            self.bus.send(can_message)
+         except:
+            pass
          
-
-
    def start_communication(self, values):
       self.create_J1939_messages(values)
 

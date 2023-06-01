@@ -4,11 +4,11 @@ import customtkinter as ctk
 import os
 
 # Import all classes called in App
-from engine_selector import EngineSelector
-from signals import MainSignals, SecondarySignals
+from engine_selector_frame import EngineSelectorFrame
+from signals_frame import MainSignalsFrame, SecondarySignalsFrame
 from logo_frame import LogoFrame
-from start_stop import StartStop
-from engine_info import EngineImageAndInfo
+from start_stop_frame import StartStopFrame
+from engine_info_frame import EngineInfoFrame
 
 
 class App(ctk.CTk):                         
@@ -39,10 +39,10 @@ class App(ctk.CTk):
         self.logo_frame = LogoFrame(self.left_grid, appearance_mode)
         self.logo_frame.grid(column=0, row=0, sticky="nsew", pady=(0, 10))
         # Engine selector frame
-        self.engine_selector_frame = EngineSelector(self.left_grid, self)
+        self.engine_selector_frame = EngineSelectorFrame(self.left_grid, self)
         self.engine_selector_frame.grid(column=0, row=1, sticky="nsew", pady=10)
         # Start/stop frame
-        self.start_stop_frame = StartStop(self.left_grid, self)
+        self.start_stop_frame = StartStopFrame(self.left_grid, self)
         self.start_stop_frame.grid(column=0, row=2, sticky="nsew", pady=(10, 0))
 
         #------------------------------------------------------------------------------
@@ -54,10 +54,10 @@ class App(ctk.CTk):
         self.center_grid.rowconfigure((0, 1), weight=1)
 
         # Engine image and info frame
-        self.image_info_frame = EngineImageAndInfo(self.center_grid)
+        self.image_info_frame = EngineInfoFrame(self.center_grid)
         self.image_info_frame.grid(column=0, row=0, sticky="nsew", pady=(0, 10))    
         # Main signals frame
-        self.main_signals_frame = MainSignals(self.center_grid)
+        self.main_signals_frame = MainSignalsFrame(self.center_grid)
         self.main_signals_frame.grid(column=0, row=1, sticky="nsew", pady=(10, 0))
 
         #------------------------------------------------------------------------------
@@ -69,13 +69,13 @@ class App(ctk.CTk):
         self.right_grid.rowconfigure(0, weight=1)
 
         # Secondary signals frame
-        self.secondary_signals_frame = SecondarySignals(self.right_grid)
+        self.secondary_signals_frame = SecondarySignalsFrame(self.right_grid)
         self.secondary_signals_frame.grid(column=0, row=0, sticky="nsew", pady=(0))    
 
-    def set_signal_switches(self, main_switch_states, switch_states, engine_range, engine_series):
+    def set_engine(self, main_switch_states, switch_states, engine_range, engine_series):
         self.main_signals_frame.set_switches(main_switch_states)
         self.secondary_signals_frame.set_switches(switch_states)
-        self.image_info_frame.set_image(engine_range, engine_series)
+        self.image_info_frame.set_engine(engine_range, engine_series)
 
     def get_values(self):
         values = self.main_signals_frame.get_main_values()
