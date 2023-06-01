@@ -5,7 +5,7 @@ import os
 
 # Import all classes called in App
 from engine_selector_frame import EngineSelectorFrame
-from signals_frame import MainSignalsFrame, SecondarySignalsFrame
+from signals_frames import MainSignalsFrame, SecondarySignalsFrame
 from logo_frame import LogoFrame
 from start_stop_frame import StartStopFrame
 from engine_info_frame import EngineInfoFrame
@@ -78,8 +78,8 @@ class App(ctk.CTk):
         self.image_info_frame.set_engine(engine_range, engine_series)
 
     def get_values(self):
-        values = self.main_signals_frame.get_main_values()
-        secondary_values = self.secondary_signals_frame.get_secondary_values()
+        values = self.main_signals_frame.get_values()
+        secondary_values = self.secondary_signals_frame.get_values()
         for value in secondary_values:
             values.append(value)
         return values
