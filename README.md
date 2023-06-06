@@ -1,4 +1,5 @@
 # EDTI - Engine Digital Twin Interface
+Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria, 2023.
 
 ## Project description.
 This python project is a CustomTkinter based GUI that can communicate through CAN bus with a DSE controller.
