@@ -9,6 +9,7 @@
 
 import customtkinter as ctk     # GUI library
 import serial.tools.list_ports  # For searching usb serial ports
+import os                       # For OS differences whith serial ports
 
 class ChannelSelectorFrame(ctk.CTkFrame):       # Channel selector class with a button and a menu
     def __init__(self, master, app):
@@ -41,9 +42,12 @@ class ChannelSelectorFrame(ctk.CTkFrame):       # Channel selector class with a 
         ports = serial.tools.list_ports.comports()  # Looks for all serial ports active
         self.usb_serial_channels = []               # List of channels to be displayed in menu
         for port in ports:
-            if 'USB Serial' in port.description:
-                channel = port.device.replace('/dev/cu.', '/dev/tty.')  # Corrects macOs channel names
-                self.usb_serial_channels.append(channel)                # Adds to the channels list
+            if os.name == 'posix':  # macOS / Linux
+                if 'USB Serial' in port.description:
+                    channel = port.device.replace('/dev/cu.', '/dev/tty.')  # Corrects macOs channel names
+                    self.usb_serial_channels.append(channel)                # Adds to the channels list
+            elif os.name == 'nt':   # Windows
+                self.usb_serial_channels.append(port.device)
         if self.usb_serial_channels:    # Checks if a serial port was found
             self.channel_menu.set("Select USB Serial Channel")          # Enables the channel selector
             self.channel_menu.configure(state="enabled", values=self.usb_serial_channels)
