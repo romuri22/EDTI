@@ -47,7 +47,7 @@ class ChannelSelectorFrame(ctk.CTkFrame):       # Channel selector class with a 
                     channel = port.device.replace('/dev/cu.', '/dev/tty.')  # Corrects macOs channel names
                     self.usb_serial_channels.append(channel)                # Adds to the channels list
             elif os.name == 'nt':   # Windows
-                self.usb_serial_channels.append(port.device)
+                self.usb_serial_channels.append(port.device)                # Adds to the channels list
         if self.usb_serial_channels:    # Checks if a serial port was found
             self.channel_menu.set("Select USB Serial Channel")          # Enables the channel selector
             self.channel_menu.configure(state="enabled", values=self.usb_serial_channels)
