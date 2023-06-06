@@ -9,12 +9,12 @@ class EngineInfoFrame(ctk.CTkFrame):     # Class for displaying basic engine inf
         # Engine image and info frame configuration
         self.engine_info_frame = ctk.CTkFrame(master)
         self.engine_info_frame.grid(sticky="nsew", pady=(0, 10))
-        self.engine_info_frame.grid_columnconfigure((0, 1, 2), weight=1)
+        self.engine_info_frame.grid_columnconfigure(0, weight=1)
         self.engine_info_frame.grid_rowconfigure((0, 1, 2), weight=1)
 
         # Label
         self.engine_info_label = ctk.CTkLabel(self.engine_info_frame, text="SELECT ENGINE RANGE AND SERIES")
-        self.engine_info_label.grid(row=1, column=1, padx=20, pady=(0, 10), sticky="nsew")
+        self.engine_info_label.grid(row=1, column=0, padx=20, pady=(0, 10), sticky="nsew")
 
         self.range_label = ctk.CTkLabel(self.engine_info_frame)
         self.range_image = ctk.CTkLabel(self.engine_info_frame)
@@ -44,6 +44,6 @@ class EngineInfoFrame(ctk.CTkFrame):     # Class for displaying basic engine inf
         self.series_label.configure(text=f"ENGINE SERIES: {engine_series}")
 
         self.engine_info_label.grid_remove()
-        self.range_image.grid(row=2, column=0)
-        self.range_label.grid(row=0, column=0, padx=20, pady=(20, 0), sticky="nsew")
-        self.series_label.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
+        self.range_label.grid(row=0, column=0, padx=20, pady=(20, 5), sticky="nsew")
+        self.range_image.grid(row=1, column=0)
+        self.series_label.grid(row=2, column=0, padx=20, pady=(5, 20), sticky="nsew")

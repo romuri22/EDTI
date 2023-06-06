@@ -44,19 +44,19 @@ class EngineSelectorFrame(ctk.CTkFrame):         # Engine selector class with 2 
         self.main_switch_states = [1, 1, 1, 1]
         engine_series = value
         if value == "ADEC":
-            self.switch_states = [1, 0, 1, 1, 1, 1, 1, 1]
+            self.switch_states = [1, 0, 1, 1, 1, 1]
         elif value == "MDEC":
-            self.switch_states = [1, 0, 1, 1, 1, 1, 1, 1]
+            self.switch_states = [1, 0, 1, 1, 1, 1]
         elif value == "ECU8":
-            self.switch_states = [0, 1, 0, 0, 1, 0, 1, 1]
+            self.switch_states = [0, 1, 0, 0, 1, 0]
         elif value == "1300":
-            self.switch_states = [1, 0, 0, 0, 1, 0, 1, 1]
+            self.switch_states = [1, 0, 0, 0, 1, 0]
         elif value == "ADEM3":
-            self.switch_states = [0, 0, 1, 1, 1, 0, 1, 1]
+            self.switch_states = [0, 0, 1, 1, 1, 0]
         elif value == "ADEM4":
-            self.switch_states = [0, 0, 1, 1, 1, 0, 1, 1]
+            self.switch_states = [0, 0, 1, 1, 1, 0]
         elif value == "S6":
-            self.switch_states = [1, 0, 1, 0, 1, 0, 1, 1]
+            self.switch_states = [1, 0, 1, 0, 1, 0]
         else:
             self.main_switch_states = [0, 0, 0, 0]
             

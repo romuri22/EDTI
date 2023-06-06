@@ -1,47 +1,35 @@
 import can
-import time
 
 class MessageCreator():                     # Message creator class
    def __init__(self):
       
       # Parameters for each signal sent
       self.SPN_info = [
-         {"text": "Engine Speed",   "level": "byte", "length": 2, "start": 4, "res": 0.125,   "offset": 0},
-         {"text": "Oil Pressure",   "level": "byte", "length": 1, "start": 4, "res": 4,       "offset": 0},
-         {"text": "Coolant Temp",   "level": "byte", "length": 1, "start": 1, "res": 1,       "offset": -40},
-         {"text": "Engine Hours",   "level": "byte", "length": 4, "start": 1, "res": 0.05,    "offset": 0},
-         {"text": "Oil Temp",       "level": "byte", "length": 2, "start": 3, "res": 0.03125, "offset": -273},
-         {"text": "Coolant Pressure","level":"byte", "length": 1, "start": 7, "res": 2,       "offset": 0},
-         {"text": "Inlet Temp",     "level": "byte", "length": 1, "start": 3, "res": 1,       "offset": -40},
-         {"text": "Fuel Temp",      "level": "byte", "length": 1, "start": 2, "res": 1,       "offset": -40},
-         {"text": "Turbo Pressure", "level": "byte", "length": 1, "start": 2, "res": 4,       "offset": 0},
-         {"text": "Fuel Pressure",  "level": "byte", "length": 1, "start": 1, "res": 4,       "offset": 0},
-         {"text": "DM1 Amber",      "level": "bit",  "length":0.2,"start":6.5,"res": 1,    "offset": 0},
-         {"text": "DM1 Red",        "level": "bit",  "length":0.2,"start":6.3,"res": 1,    "offset": 0},
-         {"text": "Atmos Pressure", "level": "byte", "length": 2, "start": 1, "res": 0.5,     "offset": 0},
-         {"text": "Rated Speed",    "level": "byte", "length": 2, "start": 3, "res": 0.125,   "offset": 0}
+         {"text": "Engine Speed",   "level": "byte", "length": 2, "start": 4, "res": 0.125, "offset": 0},
+         {"text": "Oil Pressure",   "level": "byte", "length": 1, "start": 4, "res": 4,     "offset": 0},
+         {"text": "Coolant Temp",   "level": "byte", "length": 1, "start": 1, "res": 1,     "offset":-40},
+         {"text": "Engine Hours",   "level": "byte", "length": 4, "start": 1, "res": 0.05,  "offset": 0},
+         {"text": "Oil Temp",       "level": "byte", "length": 2, "start": 3, "res":0.03125,"offset":-273},
+         {"text": "Coolant Pressure","level":"byte", "length": 1, "start": 7, "res": 2,     "offset": 0},
+         {"text": "Inlet Temp",     "level": "byte", "length": 1, "start": 3, "res": 1,     "offset":-40},
+         {"text": "Fuel Temp",      "level": "byte", "length": 1, "start": 2, "res": 1,     "offset":-40},
+         {"text": "Turbo Pressure", "level": "byte", "length": 1, "start": 2, "res": 2,     "offset": 0},
+         {"text": "Fuel Pressure",  "level": "byte", "length": 1, "start": 1, "res": 4,     "offset": 0},
+         {"text": "Atmos Pressure", "level": "byte", "length": 2, "start": 1, "res": 0.5,   "offset": 0},
+         {"text": "Rated Speed",    "level": "byte", "length": 2, "start": 3, "res": 0.125, "offset": 0}
       ]
 
       # Paramers and signals included for each PGN, id's are taken from J1939-71 standard
+      # Last two bytes of "can_id" are set at a source adress of '00', different applications may need adjusting
       self.PGN_info = [
-         {"pgn": 61444, "can_id": 0x0CF00400, "signals": [0]},
+         {"pgn": 61444, "can_id": 0x0CF00400, "signals": [0]}, # "signals" stands for which SPN's are included in each PGN
          {"pgn": 65263, "can_id": 0x18FEEF00, "signals": [1, 5, 9]},
          {"pgn": 65262, "can_id": 0x18FEEE00, "signals": [2, 4, 7]},
          {"pgn": 65253, "can_id": 0x18FEE500, "signals": [3]},
          {"pgn": 65270, "can_id": 0x18FEF600, "signals": [6, 8]},
-         {"pgn": 61441, "can_id": 0x18FEF200, "signals": [10, 11]},
-         {"pgn": 65269, "can_id": 0x18FEF500, "signals": [12]},
-         {"pgn": 65214, "can_id": 0x19FEBE00, "signals": [13]}
+         {"pgn": 65269, "can_id": 0x18FEF500, "signals": [10]},
+         {"pgn": 65214, "can_id": 0x19FEBE00, "signals": [11]}
       ]
-      try:
-         self.bus = can.interface.Bus(interface='seeedstudio', channel='/dev/tty.usbserial-1420', bitrate=250000)
-      except:
-         try:
-            self.bus = can.interface.Bus(interface='seeedstudio', channel='COM3', bitrate=250000)
-         except:
-            pass
-         pass
-
 
 
    # Function that scales a value to a resolution, converts to hex (little endian),
@@ -111,10 +99,15 @@ class MessageCreator():                     # Message creator class
          try:
             self.bus.send(can_message)
          except:
-            pass
-         
+            print("No bus configured")
+   
+   # Function called by start_stop_frame to update and send all can messages
    def start_communication(self, values):
       self.create_J1939_messages(values)
+
+   def set_channel(self, channel):
+      self.bus = can.interface.Bus(interface='seeedstudio', channel=channel, bitrate=250000)
+      print(channel)
 
 
 

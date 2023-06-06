@@ -5,11 +5,11 @@ import os
 
 # Import all classes called in App
 from engine_selector_frame import EngineSelectorFrame
-from signals_frames import MainSignalsFrame, SecondarySignalsFrame
+from signal_frames import MainSignalsFrame, SecondarySignalsFrame
 from logo_frame import LogoFrame
 from start_stop_frame import StartStopFrame
 from engine_info_frame import EngineInfoFrame
-
+from channel_selector_frame import ChannelSelectorFrame
 
 class App(ctk.CTk):                         
     def __init__(self, appearance_mode):
@@ -66,20 +66,28 @@ class App(ctk.CTk):
         self.right_grid.grid(column=2, row=0, sticky="nsew", padx=(10, 20), pady=20)
         # Right grid weights
         self.right_grid.columnconfigure(0, weight=1)
-        self.right_grid.rowconfigure(0, weight=1)
+        self.right_grid.rowconfigure((0), weight=0)
+        self.right_grid.rowconfigure((1), weight=2)
 
         # Secondary signals frame
+        self.channel_selector_frame = ChannelSelectorFrame(self.right_grid, self)
+        self.channel_selector_frame.grid(column=0, row=0, sticky="nsew", pady=(0, 10))
         self.secondary_signals_frame = SecondarySignalsFrame(self.right_grid)
-        self.secondary_signals_frame.grid(column=0, row=0, sticky="nsew", pady=(0))    
+        self.secondary_signals_frame.grid(column=0, row=1, sticky="nsew", pady=(10, 0))    
 
+    # Function called by engine_selector_frame, sets signal switches and engine info for a given engine
     def set_engine(self, main_switch_states, switch_states, engine_range, engine_series):
         self.main_signals_frame.set_switches(main_switch_states)
         self.secondary_signals_frame.set_switches(switch_states)
         self.image_info_frame.set_engine(engine_range, engine_series)
 
+    # Function called by start_stop_frame, gets values from signal frames, appends them together
     def get_values(self):
         values = self.main_signals_frame.get_values()
         secondary_values = self.secondary_signals_frame.get_values()
         for value in secondary_values:
             values.append(value)
         return values
+    
+    def set_channel(self, channel):
+        self.start_stop_frame.set_channel(channel)

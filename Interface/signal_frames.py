@@ -109,17 +109,15 @@ class MainSignalsFrame(SignalFrame):            # Class with main signals slider
             {"text": "Coolant Temp", "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
             {"text": "Engine Hours", "initial": 0, "final": 10000, "steps": 200000, "unit": "hr"},
         ]
-        # Creates necessary sliders
+        # Creates main sliders
         self.create_sliders()
-
-
 
 class SecondarySignalsFrame(SignalFrame):       # Similar to MainSignals, sends 2 constants
     def __init__(self,master):
         super().__init__(master)
 
         #Signals inside secondary frame
-        self.number_of_signals = 8
+        self.number_of_signals = 6
         # This frame sends 2 constant signals
         self.ATMOS_PRESSURE = 101.325
         self.RATED_SPEED = 1800
@@ -127,9 +125,9 @@ class SecondarySignalsFrame(SignalFrame):       # Similar to MainSignals, sends 
 
         # Secondary signals frame configuration
         self.signals_frame = ctk.CTkFrame(master)
-        self.signals_frame.grid(sticky="nsew")
+        self.signals_frame.grid(sticky="nsew", pady=(10, 0))
         self.signals_frame.grid_columnconfigure((2), weight=3)
-        self.signals_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9), weight=1)
+        self.signals_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
 
         # Secondary signals label
         self.signals_label = ctk.CTkLabel(self.signals_frame, text="SECONDARY SIGNALS")
@@ -146,9 +144,7 @@ class SecondarySignalsFrame(SignalFrame):       # Similar to MainSignals, sends 
             {"text": "Fuel Temp", "initial": -40, "final": 215, "steps": 255, "unit": "ºC"},
             {"text": "Turbo Pressure", "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
             {"text": "Fuel Pressure", "initial": 0, "final": 1020, "steps": 255, "unit": "kPa"},
-            {"text": "DM1 Amber", "initial": 0, "final": 1, "steps": 1, "unit": ""},
-            {"text": "DM1 Red", "initial": 0, "final": 1, "steps": 1, "unit": ""},
         ]
-        # Creates necessary sliders
+        # Creates secondary sliders
         self.create_sliders()
 
