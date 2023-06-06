@@ -1,6 +1,15 @@
-import customtkinter as ctk
-from PIL import Image
-import os
+# logo_frame.py
+# -------------------------------------------------------------------
+
+# Engine Digital Twin Interface.
+# Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria Ramirez.
+# 2023
+
+# Logo frame class, displays Generac logo.
+
+import customtkinter as ctk     # GUI library
+from PIL import Image           # To open image files
+import os                       # For finding image file paths
 
 class LogoFrame(ctk.CTkFrame):              # Logo frame class
     def __init__(self, master, appearance_mode):

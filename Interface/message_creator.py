@@ -1,8 +1,20 @@
-import can
+# message_creator.py
+# -------------------------------------------------------------------
+
+# Engine Digital Twin Interface.
+# Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria Ramirez.
+# 2023
+
+# Message creator class, takes signal data and a channel, converts to J1939 messages,
+# sends them through the selected channel using CAN Bus protocol.
+
+import can     # CAN Bus protocol library, to create CAN messages and to define a CAN bus.
 
 class MessageCreator():                     # Message creator class
-   def __init__(self):
+   def __init__(self, start_stop_frame):
       
+      self.start_stop_frame = start_stop_frame
+
       # Parameters for each signal sent
       self.SPN_info = [
          {"text": "Engine Speed",   "level": "byte", "length": 2, "start": 4, "res": 0.125, "offset": 0},
@@ -73,6 +85,7 @@ class MessageCreator():                     # Message creator class
    # Loops through a dictionary to define id and data structure for each pgn.
    def create_J1939_messages(self, values):
       for pgn in self.PGN_info:
+         # Each message is printed on the serial monitor for debugging purposes
          print("----------------------------------------------------------------------------------------------------")
          print("PGN: ", pgn["pgn"])
          # Looks for id for each PGN
@@ -92,7 +105,7 @@ class MessageCreator():                     # Message creator class
             data = self.add_to_pgn_data(value, res, offset, data, start, length, level)
          # With the id and data, creates a can message
          can_message = self.create_can_message(can_id, data)
-         # Each pgn message is printed to console and stored in a message array
+         # Each pgn message is printed to console for debugging purposes
          print("-------------------")
          print("CAN MESSAGE FOR PGN")
          print(can_message)
@@ -100,11 +113,13 @@ class MessageCreator():                     # Message creator class
             self.bus.send(can_message)
          except:
             print("No bus configured")
+            self.start_stop_frame.stop_communication()
    
    # Function called by start_stop_frame to update and send all can messages
    def start_communication(self, values):
       self.create_J1939_messages(values)
 
+   # Sets the bus channel to the selected serial port
    def set_channel(self, channel):
       self.bus = can.interface.Bus(interface='seeedstudio', channel=channel, bitrate=250000)
       print(channel)

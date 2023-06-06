@@ -1,4 +1,14 @@
-import customtkinter as ctk
+# signal_frames.py
+# -------------------------------------------------------------------
+
+# Engine Digital Twin Interface.
+# Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria Ramirez.
+# 2023
+
+# A signal frame parent class, that creates sliders and entries that control variables.
+# Two derived classes with information on the main and secondary signals.
+
+import customtkinter as ctk     # GUI library
 
 class SignalFrame(ctk.CTkFrame):
     def __init__(self,master):

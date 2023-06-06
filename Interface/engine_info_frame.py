@@ -1,6 +1,15 @@
-import customtkinter as ctk
-from PIL import Image
-import os
+# engine_info_frame.py
+# -------------------------------------------------------------------
+
+# Engine Digital Twin Interface.
+# Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria Ramirez.
+# 2023
+
+# Shows basic info and an image of the selected engine range and series.
+
+import customtkinter as ctk     # GUI library
+from PIL import Image           # To open image files
+import os                       # For finding image file paths
 
 class EngineInfoFrame(ctk.CTkFrame):     # Class for displaying basic engine info
     def __init__(self,master):
@@ -19,7 +28,6 @@ class EngineInfoFrame(ctk.CTkFrame):     # Class for displaying basic engine inf
         self.range_label = ctk.CTkLabel(self.engine_info_frame)
         self.range_image = ctk.CTkLabel(self.engine_info_frame)
         self.series_label = ctk.CTkLabel(self.engine_info_frame)
-        self.series_image = ctk.CTkLabel(self.engine_info_frame)
 
         mtu_file = os.path.abspath("mtu_img.png")
         perkins_file = os.path.abspath("perkins_img.png")
@@ -29,9 +37,8 @@ class EngineInfoFrame(ctk.CTkFrame):     # Class for displaying basic engine inf
         self.perkins_image = ctk.CTkImage(Image.open(perkins_file), size=(256*0.6, 265*0.6))
         self.scania_image = ctk.CTkImage(Image.open(scania_file), size=(1189*0.174, 913*0.174))
 
+    # Function that sets info and image to the selected engine
     def set_engine(self, engine_range, engine_series):
-        #self.image_info_frame.configure(fg_color="gray90")
-        
         if engine_range == "MTU":
             self.range_image.configure(text="", image=self.mtu_image)
             self.range_label.configure(text="ENGINE RANGE: MTU")

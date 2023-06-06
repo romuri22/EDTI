@@ -1,3 +1,12 @@
+# engine_selector_frame.py
+# -------------------------------------------------------------------
+
+# Engine Digital Twin Interface.
+# Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria Ramirez.
+# 2023
+
+# Engine selector class, has 2 menus to choose an engine range and engine series.
+
 import customtkinter as ctk
 
 
@@ -43,6 +52,7 @@ class EngineSelectorFrame(ctk.CTkFrame):         # Engine selector class with 2 
     def select_engine_model(self, value):   # Function called by engine_range_menu with an engine range
         self.main_switch_states = [1, 1, 1, 1]
         engine_series = value
+        # Switch states depend on which engine can send which signals through CAN bus
         if value == "ADEC":
             self.switch_states = [1, 0, 1, 1, 1, 1]
         elif value == "MDEC":

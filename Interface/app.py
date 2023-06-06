@@ -1,9 +1,17 @@
-# App class, main interface, calls other classes into 3 grids
+# app.py
+# -------------------------------------------------------------------
 
-import customtkinter as ctk
-import os
+# Engine Digital Twin Interface.
+# Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria Ramirez.
+# 2023
 
-# Import all classes called in App
+# App class, main interface, calls other classes into 3 grids, 
+# other classes handle engine selection, data, and communication.
+
+import customtkinter as ctk     # GUI library
+import os                       # For finding theme path
+
+# Import all classes called in App, these frames are arrangend in the app
 from engine_selector_frame import EngineSelectorFrame
 from signal_frames import MainSignalsFrame, SecondarySignalsFrame
 from logo_frame import LogoFrame
@@ -12,12 +20,12 @@ from engine_info_frame import EngineInfoFrame
 from channel_selector_frame import ChannelSelectorFrame
 
 class App(ctk.CTk):                         
-    def __init__(self, appearance_mode):
+    def __init__(self, appearance_mode, window_size):
         super().__init__()
 
         # App window configuration
         self.title("Engine Signal Simulation Interface")
-        self.geometry(f"{1300}x{600}")
+        self.geometry(window_size)
         self.resizable(0, 0)
         # App column weights
         self.columnconfigure((0), weight=1)
@@ -89,5 +97,6 @@ class App(ctk.CTk):
             values.append(value)
         return values
     
+    # Called by channel selector, calls start/stop frame to set the selected channel
     def set_channel(self, channel):
         self.start_stop_frame.set_channel(channel)

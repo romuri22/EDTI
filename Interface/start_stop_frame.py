@@ -1,6 +1,15 @@
-import customtkinter as ctk
-from message_creator import MessageCreator
-import time
+# start_stop_frame.py
+# -------------------------------------------------------------------
+
+# Engine Digital Twin Interface.
+# Written by Rodrigo Murillo Tapia, Alejandro Martinez Licon and Alejandro Gaviria Ramirez.
+# 2023
+
+# Start/stop frame class, has two buttons, calls the message creator when communicating.
+
+import customtkinter as ctk                 # GUI library
+from message_creator import MessageCreator  # This frame intances a MessageCreator object
+import time                                 # To send messages after a time interval
 
 class StartStopFrame(ctk.CTkFrame):              # Start/stop class with 2 buttons
     def __init__(self,master, app):
@@ -20,20 +29,23 @@ class StartStopFrame(ctk.CTkFrame):              # Start/stop class with 2 butto
         self.start_button.grid(column=0, row=1, padx=10, pady=5)
         self.stop_button = ctk.CTkButton(self.start_stop_frame, text="STOP", command=self.stop_communication)
         self.stop_button.grid(column=0, row=2, padx=10, pady=5)
-
+        # Default configuration
         self.start_button.configure(state="disabled")
-        self.message_creator = MessageCreator()
+        self.message_creator = MessageCreator(self)
         self.timer1 = time.time()
 
+    # Starts communication loop
     def start_communication(self):
         print("Communication Started")
         self.running = True
         self.send_messages()
 
+    # Stops communication loop
     def stop_communication(self):
         print("Communication Stopped")
         self.running = False
 
+    # Loop that updates all signal values and calls the message creator
     def send_messages(self):
         current_time = time.time()
         if self.running:
@@ -44,6 +56,7 @@ class StartStopFrame(ctk.CTkFrame):              # Start/stop class with 2 butto
                 self.timer1 = current_time
         self.after(50, self.send_messages)
 
+    # Function to set the CAN bus channel
     def set_channel(self, channel):
         self.message_creator.set_channel(channel)
         self.start_button.configure(state="enabled")
