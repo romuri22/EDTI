@@ -24,16 +24,21 @@ class App(ctk.CTk):
         super().__init__()
 
         # App window configuration
-        self.title("Engine Signal Simulation Interface")
+        self.title("Engine Digital Twin Interface")
         self.geometry(window_size)
         self.resizable(0, 0)
         # App column weights
         self.columnconfigure((0), weight=1)
         self.columnconfigure((1, 2), weight=3)
         self.rowconfigure(0, weight=1)
+        # Sets theme file
+        if os.name == 'posix':  # macOS / Linux
+            theme_file = os.path.abspath("Graphics/generac_theme.json")
+        elif os.name == 'nt':   # Windows
+            theme_file = os.path.abspath("Graphics\generac_theme.json")
         # Interface appearance configuration
+        ctk.set_default_color_theme(theme_file)
         ctk.set_appearance_mode(appearance_mode)
-        ctk.set_default_color_theme(os.path.abspath("generac_theme.json"))
 
         #------------------------------------------------------------------------------
         # Left grid with logo, engine selector, start/stop

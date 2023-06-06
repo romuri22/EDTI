@@ -25,14 +25,22 @@ class EngineInfoFrame(ctk.CTkFrame):     # Class for displaying basic engine inf
         self.engine_info_label = ctk.CTkLabel(self.engine_info_frame, text="SELECT ENGINE RANGE AND SERIES")
         self.engine_info_label.grid(row=1, column=0, padx=20, pady=(0, 10), sticky="nsew")
 
+        # Create labels for engine range, engine image, and engine series
         self.range_label = ctk.CTkLabel(self.engine_info_frame)
         self.range_image = ctk.CTkLabel(self.engine_info_frame)
         self.series_label = ctk.CTkLabel(self.engine_info_frame)
 
-        mtu_file = os.path.abspath("mtu_img.png")
-        perkins_file = os.path.abspath("perkins_img.png")
-        scania_file = os.path.abspath("scania_img.png")
+        # Sets engine image files
+        if os.name == 'posix':  # macOS / Linux
+            mtu_file = os.path.abspath("Graphics/mtu_img.png")
+            perkins_file = os.path.abspath("Graphics/perkins_img.png")
+            scania_file = os.path.abspath("Graphics/scania_img.png")
+        elif os.name == 'nt':   # Windows
+            mtu_file = os.path.abspath("Graphics\mtu_img.png")
+            perkins_file = os.path.abspath("Graphics\perkins_img.png")
+            scania_file = os.path.abspath("Graphics\scania_img.png")
 
+        # Creates and scales engine images
         self.mtu_image = ctk.CTkImage(Image.open(mtu_file), size=(513*0.43, 370*0.43))
         self.perkins_image = ctk.CTkImage(Image.open(perkins_file), size=(256*0.6, 265*0.6))
         self.scania_image = ctk.CTkImage(Image.open(scania_file), size=(1189*0.174, 913*0.174))

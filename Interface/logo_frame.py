@@ -15,10 +15,17 @@ class LogoFrame(ctk.CTkFrame):              # Logo frame class
     def __init__(self, master, appearance_mode):
         super().__init__(master)
 
-        if appearance_mode == "Dark":
-            self.logo_file = os.path.abspath("generac_logo_dark.png")
-        else:
-            self.logo_file = os.path.abspath("generac_logo_light.png")
+        # Sets logo image file depending on Light/Dark theme and OS
+        if os.name == 'posix':  # macOS / Linux
+            if appearance_mode == "Dark":
+                self.logo_file = os.path.abspath("Graphics/generac_logo_dark.png")
+            else:
+                self.logo_file = os.path.abspath("Graphics/generac_logo_light.png")
+        elif os.name == 'nt':   # Windows
+            if appearance_mode == "Dark":
+                self.logo_file = os.path.abspath("Graphics\generac_logo_dark.png")
+            else:
+                self.logo_file = os.path.abspath("Graphics\generac_logo_light.png")        
 
         # Logo frame configuration
         self.logo_frame = ctk.CTkFrame(master)
