@@ -49,7 +49,9 @@ class MessageCreator():                     # Message creator class
    def add_to_pgn_data(self, decimal, res, offset, data_list, start, length, level):
       # Scale value to resolution, round to convert to int
       scaled = round((decimal - offset) / res)
-      if level == "byte":
+      # All signals in this program have full byte-level lengths, bit-level lengths 
+      # are common in the J1939 standard for alerts and other low-resolution signals
+      if level == "byte":     # For byte-level length signals
          # Convert decimal to bytes in big-endian byte order
          new_data = scaled.to_bytes((scaled.bit_length() + 7) // 8, 'little')
          byte_data = bytearray(new_data)
@@ -59,7 +61,7 @@ class MessageCreator():                     # Message creator class
          # Modify the wanted bytes in the data list
          end = start + length
          data_list[start:end] = byte_data
-      else:
+      else:       # For bit-level length signals
          # Calculate the byte index and bit offset
          byte_index = int(start)
          bit_offset = int((start - byte_index) * 8)
