@@ -29,7 +29,6 @@ class StartStopFrame(ctk.CTkFrame):              # Start/stop class with 2 butto
         self.stop_button = ctk.CTkButton(self.start_stop_frame, text="STOP", command=self.stop_communication)
         self.stop_button.grid(column=0, row=2, padx=10, pady=5)
         # Default configuration
-        self.start_button.configure(state="disabled")
         self.message_creator = MessageCreator(self)
 
     # Starts communication loop
@@ -54,4 +53,3 @@ class StartStopFrame(ctk.CTkFrame):              # Start/stop class with 2 butto
     # Function to set the CAN bus channel
     def set_channel(self, channel):
         self.message_creator.set_channel(channel)
-        self.start_button.configure(state="enabled")

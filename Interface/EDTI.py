@@ -1,4 +1,4 @@
-# main.py
+# EDTI.py
 # -------------------------------------------------------------------
 
 # Main file for Engine Digital Twin Interface program.
