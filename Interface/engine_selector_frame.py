@@ -41,7 +41,7 @@ class EngineSelectorFrame(ctk.CTkFrame):         # Engine selector class with 2 
         self.engine_range = value
         self.engine_series_menu.set("Engine Series")
         if value == "MTU":
-            self.engine_series_menu.configure(state="enabled", values=["ADEC", "MDEC", "ECU8"])
+            self.engine_series_menu.configure(state="enabled", values=["ADEC", "ECU8"])
         elif value == "Perkins":
             self.engine_series_menu.configure(state="enabled", values=["1300", "ADEM3", "ADEM4"])
         elif value == "Scania":
@@ -54,11 +54,9 @@ class EngineSelectorFrame(ctk.CTkFrame):         # Engine selector class with 2 
         engine_series = value
         # Switch states depend on which engine can send which signals through CAN bus
         if value == "ADEC":
-            self.switch_states = [1, 0, 1, 1, 1, 1]
-        elif value == "MDEC":
-            self.switch_states = [1, 0, 1, 1, 1, 1]
+            self.switch_states = [1, 0, 0, 1, 1, 1]
         elif value == "ECU8":
-            self.switch_states = [0, 1, 0, 0, 1, 0]
+            self.switch_states = [0, 1, 1, 0, 0, 0]
         elif value == "1300":
             self.switch_states = [1, 0, 0, 0, 1, 0]
         elif value == "ADEM3":

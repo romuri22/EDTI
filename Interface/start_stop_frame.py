@@ -49,12 +49,11 @@ class StartStopFrame(ctk.CTkFrame):              # Start/stop class with 2 butto
     def send_messages(self):
         current_time = time.time()
         if self.running:
-            if current_time - self.timer1 >= 0.01:
-                values= self.app.get_values()
-                print(values)
-                self.message_creator.start_communication(values)
-                self.timer1 = current_time
-        self.after(50, self.send_messages)
+            values= self.app.get_values()
+            print(values)
+            self.message_creator.start_communication(values)
+            self.timer1 = current_time
+        self.after(50, self.send_messages)      # Updates and sends messages every 50 ms
 
     # Function to set the CAN bus channel
     def set_channel(self, channel):

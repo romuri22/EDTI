@@ -40,7 +40,7 @@ class MessageCreator():                     # Message creator class
          {"pgn": 65253, "can_id": 0x18FEE500, "signals": [3]},
          {"pgn": 65270, "can_id": 0x18FEF600, "signals": [6, 8]},
          {"pgn": 65269, "can_id": 0x18FEF500, "signals": [10]},
-         {"pgn": 65214, "can_id": 0x19FEBE00, "signals": [11]}
+         {"pgn": 65214, "can_id": 0x18FEBE00, "signals": [11]}
       ]
 
 
